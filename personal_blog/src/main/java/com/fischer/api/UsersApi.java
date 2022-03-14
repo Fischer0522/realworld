@@ -11,7 +11,9 @@ import com.fischer.pojo.User;
 import com.fischer.repository.UserRepository;
 import com.fischer.service.user.UserQueryService;
 import com.fischer.service.user.UserService;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.Duration;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -31,6 +35,7 @@ public class UsersApi {
     private JwtService jwtService;
     private UserService userService;
     private StringRedisTemplate redisTemplate;
+    private int sesstionTime;
 
 
     @Autowired
@@ -39,7 +44,8 @@ public class UsersApi {
             UserQueryService userQueryService,
             JwtService jwtService,
             UserService userService,
-            StringRedisTemplate redisTemplate
+            StringRedisTemplate redisTemplate,
+            @Value("${jwt.sessionTime}")int sessionTime
 
     ){
         this.userRepository=userRepository;
@@ -47,6 +53,7 @@ public class UsersApi {
         this.jwtService=jwtService;
         this.userService=userService;
         this.redisTemplate=redisTemplate;
+        this.sesstionTime=sessionTime;
 
     }
 
@@ -71,7 +78,9 @@ public class UsersApi {
                         .equals(byEmail.get().getPassword())){
             User user = byEmail.get();
             String loginId="loginUser:"+user.getId();
-            redisTemplate.opsForValue().set(loginId,"1");
+            redisTemplate.opsForValue().set(loginId,user.getUsername());
+            Duration duration=Duration.ofDays(7);
+            redisTemplate.expire(loginId,duration);
             UserData userData = userQueryService.finById(user.getId()).get();
 
             return ResponseEntity
