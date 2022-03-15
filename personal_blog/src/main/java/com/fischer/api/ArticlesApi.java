@@ -34,7 +34,7 @@ public class ArticlesApi {
     }
     @PostMapping
     public ResponseEntity createArticle(
-            @Validated @RequestBody NewArticleParam newArticleParam,
+            @Valid @RequestBody NewArticleParam newArticleParam,
             @RequestHeader(value = "token")String token){
         User user = jwtService.toUser(token).get();
         Article article = articleCommandService.createArticle(newArticleParam, user);
