@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -43,8 +44,9 @@ public class ArticleApi {
     @GetMapping
     public ResponseEntity<?>article(
             @PathVariable("slug") String slug,
-            @RequestHeader(value ="token")String token){
+            @RequestHeader(value ="token")String token)throws Exception{
         User user = jwtService.toUser(token).get();
+
         Optional<ArticleData> articleData = articleQueryService.findBySlug(slug, user);
             return articleData
                     .map(articleData1 -> ResponseEntity.ok(articleResponse(articleData1)))
@@ -56,7 +58,8 @@ public class ArticleApi {
     public ResponseEntity<?> updateArticle(
             @PathVariable("slug") String slug,
            @RequestHeader(value = "token") String token,
-            @Valid @RequestBody UpdateArticleParam updateArticleParam){
+            @Valid @RequestBody UpdateArticleParam updateArticleParam)throws Exception{
+
         User user = jwtService.toUser(token).get();
         return articleRepository
                 .findBySlug(slug)
@@ -78,7 +81,8 @@ public class ArticleApi {
     @DeleteMapping
     public ResponseEntity deleteArticle(
             @PathVariable("slug") String slug,
-            @RequestHeader(value = "token")String token){
+            @RequestHeader(value = "token")String token)throws Exception{
+
         User user = jwtService.toUser(token).get();
         return articleRepository.findBySlug(slug)
                 .map(article -> {
