@@ -7,9 +7,9 @@ import java.lang.annotation.*;
 @Documented
 @Constraint(validatedBy = DuplicatedArticleValidator.class)
 @Target({ElementType.METHOD,ElementType.FIELD,ElementType.PARAMETER,ElementType.TYPE_USE})
-@Retention(RetentionPolicy.CLASS)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface DuplicatedArticleConstraint {
-    String message() default "article name exists";
+    String message() default "已经存在了相同或者同音的标题，换一个吧~";
 
     Class<?>[] groups() default {};
 

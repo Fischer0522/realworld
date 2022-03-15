@@ -35,8 +35,6 @@ public class UsersApi {
     private JwtService jwtService;
     private UserService userService;
     private StringRedisTemplate redisTemplate;
-    private int sesstionTime;
-
 
     @Autowired
     public UsersApi(
@@ -53,7 +51,6 @@ public class UsersApi {
         this.jwtService=jwtService;
         this.userService=userService;
         this.redisTemplate=redisTemplate;
-        this.sesstionTime=sessionTime;
 
     }
 

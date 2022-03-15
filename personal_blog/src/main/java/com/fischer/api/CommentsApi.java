@@ -29,16 +29,19 @@ public class CommentsApi {
     private CommentRepository commentRepository;
     private CommentQueryService commentQueryService;
     private JwtService jwtService;
+    private AuthorizationService authorizationService;
     @Autowired
     public CommentsApi(
             ArticleRepository articleRepository,
             CommentRepository commentRepository,
             CommentQueryService commentQueryService,
-            JwtService jwtService){
+            JwtService jwtService,
+            AuthorizationService authorizationService){
         this.articleRepository=articleRepository;
         this.commentQueryService=commentQueryService;
         this.commentRepository=commentRepository;
         this.jwtService=jwtService;
+        this.authorizationService=authorizationService;
     }
     @PostMapping
     public ResponseEntity<?> createComment(
@@ -76,7 +79,7 @@ public class CommentsApi {
         Article article = articleRepository.findBySlug(slug).orElseThrow(()->new BizException(HttpStatus.NOT_FOUND,"该评论所属的文章已经不存在"));
         return commentRepository.find(article.getId(),commentId )
                 .map(comment -> {
-                    if(AuthorizationService.canWriteComment(user,article,comment)){
+                    if(authorizationService.canWriteComment(user,article,comment)){
                         commentRepository.remove(comment);
                         return ResponseEntity.noContent().build();
                     }

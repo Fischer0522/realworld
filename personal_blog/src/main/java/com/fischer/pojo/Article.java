@@ -14,8 +14,6 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import org.joda.time.DateTime;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
@@ -52,7 +50,8 @@ public class Article {
         this.title=title;
         this.description=description;
         this.body=body;
-        this.tags = new HashSet<>(tagList).stream().map(Tag::new).collect(toList());
+        if(tags!=null){
+        this.tags = new HashSet<>(tagList).stream().map(Tag::new).collect(toList());}
         this.createdAt= TimeCursor.toTime(DateTime.now());
         this.updatedAt=TimeCursor.toTime(DateTime.now());
         this.userId=userId;
@@ -73,7 +72,7 @@ public class Article {
             this.updatedAt=TimeCursor.toTime(DateTime.now());
         }
     }
-    public static String toSlug(String title)  {
+    public static String toSlug(String title) {
         HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
         format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
         format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
@@ -83,7 +82,8 @@ public class Article {
         } catch (BadHanyuPinyinOutputFormatCombination e) {
             e.printStackTrace();
         }
-        return s;
+
+        return s.toLowerCase().replaceAll("[\\&|[\\uFE30-\\uFFA0]|\\’|\\”|\\s\\?\\,\\.]+", "-");
     }
 
 }

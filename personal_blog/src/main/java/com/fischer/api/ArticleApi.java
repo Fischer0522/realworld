@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -29,24 +28,26 @@ public class ArticleApi {
     private ArticleRepository articleRepository;
     private ArticleCommandService articleCommandService;
     private JwtService jwtService;
+    private AuthorizationService authorizationService;
 
     @Autowired
     public ArticleApi(
             ArticleQueryService articleQueryService,
             ArticleRepository articleRepository,
             ArticleCommandService articleCommandService,
-            JwtService jwtService) {
+            JwtService jwtService,
+            AuthorizationService authorizationService) {
         this.articleQueryService=articleQueryService;
         this.articleCommandService=articleCommandService;
         this.articleRepository=articleRepository;
         this.jwtService=jwtService;
+        this.authorizationService=authorizationService;
     }
     @GetMapping
     public ResponseEntity<?>article(
             @PathVariable("slug") String slug,
-            @RequestHeader(value ="token")String token)throws Exception{
+            @RequestHeader(value ="token")String token){
         User user = jwtService.toUser(token).get();
-
         Optional<ArticleData> articleData = articleQueryService.findBySlug(slug, user);
             return articleData
                     .map(articleData1 -> ResponseEntity.ok(articleResponse(articleData1)))
@@ -58,13 +59,12 @@ public class ArticleApi {
     public ResponseEntity<?> updateArticle(
             @PathVariable("slug") String slug,
            @RequestHeader(value = "token") String token,
-            @Valid @RequestBody UpdateArticleParam updateArticleParam)throws Exception{
-
+            @Valid @RequestBody UpdateArticleParam updateArticleParam){
         User user = jwtService.toUser(token).get();
         return articleRepository
                 .findBySlug(slug)
                 .map(article -> {
-                    if(!AuthorizationService.canWriterArticle(user,article)){
+                    if(!authorizationService.canWriterArticle(user,article)){
                         throw  new BizException(HttpStatus.FORBIDDEN,"非常抱歉，您没有权限对该文章进行修改");
                     }
                     else{
@@ -81,12 +81,11 @@ public class ArticleApi {
     @DeleteMapping
     public ResponseEntity deleteArticle(
             @PathVariable("slug") String slug,
-            @RequestHeader(value = "token")String token)throws Exception{
-
+            @RequestHeader(value = "token")String token){
         User user = jwtService.toUser(token).get();
         return articleRepository.findBySlug(slug)
                 .map(article -> {
-                    if(!AuthorizationService.canWriterArticle(user,article)){
+                    if(!authorizationService.canWriterArticle(user,article)){
                         throw new BizException(HttpStatus.FORBIDDEN,"非常抱歉，您无法删除该文章");
                     }
                     else{

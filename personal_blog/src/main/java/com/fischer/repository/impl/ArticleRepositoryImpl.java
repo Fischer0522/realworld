@@ -54,15 +54,17 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 
     }
     private void createNew(Article article) {
-        for (Tag tag : article.getTags()) {
-            Tag targetTag = Optional.ofNullable(findTag(tag.getName())).orElseGet(() -> {
-                tagDao.insert(tag);
-                return tag;
-            });
-            ArticleTagRelation articleTagRelation=new ArticleTagRelation();
-            articleTagRelation.setArticleId(article.getId());
-            articleTagRelation.setTagId(targetTag.getId());
-            articleTagRelationDao.insert(articleTagRelation);
+        if (article.getTags()!=null) {
+            for (Tag tag : article.getTags()) {
+                Tag targetTag = Optional.ofNullable(findTag(tag.getName())).orElseGet(() -> {
+                    tagDao.insert(tag);
+                    return tag;
+                });
+                ArticleTagRelation articleTagRelation = new ArticleTagRelation();
+                articleTagRelation.setArticleId(article.getId());
+                articleTagRelation.setTagId(targetTag.getId());
+                articleTagRelationDao.insert(articleTagRelation);
+            }
         }
         articleDao.insert(article);
     }

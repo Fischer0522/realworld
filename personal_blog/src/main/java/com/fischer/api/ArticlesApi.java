@@ -11,10 +11,12 @@ import com.fischer.service.article.ArticleCommandService;
 import com.fischer.service.article.ArticleQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.HashMap;
 
+@Validated
 @RestController
 @RequestMapping("/articles")
 public class ArticlesApi {
@@ -32,7 +34,7 @@ public class ArticlesApi {
     }
     @PostMapping
     public ResponseEntity createArticle(
-            @Valid @RequestBody NewArticleParam newArticleParam,
+            @Validated @RequestBody NewArticleParam newArticleParam,
             @RequestHeader(value = "token")String token){
         User user = jwtService.toUser(token).get();
         Article article = articleCommandService.createArticle(newArticleParam, user);
