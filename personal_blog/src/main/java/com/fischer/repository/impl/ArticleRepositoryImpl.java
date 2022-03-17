@@ -93,6 +93,9 @@ public class ArticleRepositoryImpl implements ArticleRepository {
         article.setSlug(slug);
         QueryWrapper<Article> wrapper=new QueryWrapper<>(article);
         Article article1=articleDao.selectOne(wrapper);
+        if(article1==null){
+            return Optional.empty();
+        }
         ArticleTagRelation articleTagRelation=new ArticleTagRelation();
         articleTagRelation.setArticleId(article1.getId());
         QueryWrapper<ArticleTagRelation>wrapper1=new QueryWrapper<>(articleTagRelation);

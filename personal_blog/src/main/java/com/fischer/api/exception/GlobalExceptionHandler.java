@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity(map, HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
-    //@ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity NotVaildExceptionHandler(HttpServletRequest req,MethodArgumentNotValidException e){
         Map<String,Object> map=new HashMap<>();
         List<ObjectError> allErrors = e.getAllErrors();

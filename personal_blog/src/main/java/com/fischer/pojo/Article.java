@@ -15,6 +15,7 @@ import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombi
 import org.joda.time.DateTime;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -52,6 +53,7 @@ public class Article {
         this.body=body;
         if(tags!=null){
         this.tags = new HashSet<>(tagList).stream().map(Tag::new).collect(toList());}
+
         this.createdAt= TimeCursor.toTime(DateTime.now());
         this.updatedAt=TimeCursor.toTime(DateTime.now());
         this.userId=userId;
