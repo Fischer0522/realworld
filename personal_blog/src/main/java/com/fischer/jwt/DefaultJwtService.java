@@ -1,6 +1,7 @@
 package com.fischer.jwt;
 
 import com.fischer.api.exception.BizException;
+import com.fischer.assistant.Util;
 import com.fischer.dao.UserDao;
 import com.fischer.pojo.User;
 import io.jsonwebtoken.Claims;
@@ -56,9 +57,12 @@ public class DefaultJwtService implements JwtService{
 
     @Override
     public Optional<User> toUser(String token) {
+        if(Util.isEmpty(token)){
+            throw new BizException(HttpStatus.UNAUTHORIZED,"未携带token，无法正常解析");
+        }
         Optional<String> subFromToken = getSubFromToken(token);
         if(!subFromToken.isPresent()){
-            throw new BizException(HttpStatus.UNAUTHORIZED,"token解析失败");
+            throw new BizException(HttpStatus.UNAUTHORIZED,"token解析失败，token有误或者不存在该用户");
         }
         String id = subFromToken.get();
         User user = userDao.selectById(id);
@@ -67,7 +71,7 @@ public class DefaultJwtService implements JwtService{
     }
 
     private Date expireTimeFromNow(){
-        return new Date(System.currentTimeMillis()+sessionTime*1000);
+        return new Date(System.currentTimeMillis()+sessionTime*1000*7);
     }
 
 

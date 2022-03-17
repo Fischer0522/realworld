@@ -37,7 +37,7 @@ public class Article {
     private String createdAt;
     @TableField(value = "updated_at")
     private String updatedAt;
-    //日后补充tagList
+
     public Article(
             String title,
             String description,
@@ -51,9 +51,7 @@ public class Article {
         this.title=title;
         this.description=description;
         this.body=body;
-        if(tags!=null){
-        this.tags = new HashSet<>(tagList).stream().map(Tag::new).collect(toList());}
-
+        this.tags = new HashSet<>(tagList).stream().map(Tag::new).collect(toList());
         this.createdAt= TimeCursor.toTime(DateTime.now());
         this.updatedAt=TimeCursor.toTime(DateTime.now());
         this.userId=userId;

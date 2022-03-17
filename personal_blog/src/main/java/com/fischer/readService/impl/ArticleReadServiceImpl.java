@@ -33,9 +33,7 @@ public class ArticleReadServiceImpl implements ArticleReadService {
     @Override
     public ArticleData findBySlug(String slug) {
         Optional<Article> article = articleRepository.findBySlug(slug);
-        if(!article.isPresent()){
-            return null;
-        }
+
         Optional<User> user = userRepository.findById(article.get().getUserId());
         ArticleData articleData=new ArticleData(article.get(),user.get());
         return articleData;
@@ -53,7 +51,6 @@ public class ArticleReadServiceImpl implements ArticleReadService {
             System.out.println("当前的文章是"+article.getTitle());
 
             ArticleData AD=new ArticleData(article,user.get());
-            ;
             articleData.add(AD);
         }
         return articleData;

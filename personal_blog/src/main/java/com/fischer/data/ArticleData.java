@@ -40,9 +40,7 @@ public class ArticleData {
         this.body=article.getBody();
         this.createdAt=article.getCreatedAt();
         this.updatedAt=article.getUpdatedAt();
-        if(article.getTags()!=null) {
-            this.tagList = article.getTags().stream().map(Tag::getName).collect(Collectors.toList());
-        }
+        this.tagList = article.getTags().stream().map(Tag::getName).collect(Collectors.toList());
         this.profileData=new ProfileData(user);
 
     }

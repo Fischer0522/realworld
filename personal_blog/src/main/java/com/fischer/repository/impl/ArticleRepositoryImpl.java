@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fischer.api.exception.BizException;
 import com.fischer.assistant.MyPage;
 import com.fischer.assistant.TimeCursor;
 import com.fischer.dao.ArticleDao;
@@ -17,6 +18,7 @@ import com.fischer.repository.ArticleRepository;
 import org.apache.logging.log4j.util.Strings;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,6 +74,9 @@ public class ArticleRepositoryImpl implements ArticleRepository {
     @Override
     public Optional<Article> findById(String id) {
         Article article = articleDao.selectById(id);
+        if(article==null){
+            throw new BizException(HttpStatus.NOT_FOUND,"资源请求失败，要操作的文章可能已经不存在");
+        }
         ArticleTagRelation articleTagRelation=new ArticleTagRelation();
         articleTagRelation.setArticleId(id);
         QueryWrapper<ArticleTagRelation> wrapper=new QueryWrapper<>(articleTagRelation);
@@ -94,7 +99,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
         QueryWrapper<Article> wrapper=new QueryWrapper<>(article);
         Article article1=articleDao.selectOne(wrapper);
         if(article1==null){
-            return Optional.empty();
+            throw new BizException(HttpStatus.NOT_FOUND,"资源请求失败，要操作的文章可能已经不存在");
         }
         ArticleTagRelation articleTagRelation=new ArticleTagRelation();
         articleTagRelation.setArticleId(article1.getId());
@@ -132,6 +137,9 @@ public class ArticleRepositoryImpl implements ArticleRepository {
                 List<Tag> tags=tagDao.selectBatchIds(tagIds);
                 article.setTags(tags);
             }
+            else{
+                article.setTags(new LinkedList<>());
+            }
         }
         return Optional.ofNullable(articles);
     }
@@ -156,8 +164,6 @@ public class ArticleRepositoryImpl implements ArticleRepository {
         lqw.like(Strings.isNotEmpty(article.getTitle()),Article::getTitle,article.getTitle());
         lqw.like(Strings.isNotEmpty(article.getDescription()),Article::getDescription,article.getDescription());
         IPage<Article> p=new Page(myPage.getOffset(),myPage.getLimit());
-        System.out.println(myPage.getLimit());
-        System.out.println(myPage.getOffset());
          articleDao.selectPage(p, lqw);
         for (Article record : p.getRecords()) {
 
@@ -174,8 +180,10 @@ public class ArticleRepositoryImpl implements ArticleRepository {
                 List<Tag> tags=tagDao.selectBatchIds(tagIds);
                 record.setTags(tags);
             }
+            else{
+                record.setTags(new LinkedList<Tag>());
+            }
         }
-
 
         return p;
     }

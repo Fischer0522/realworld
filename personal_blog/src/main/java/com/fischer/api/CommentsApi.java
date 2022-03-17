@@ -2,6 +2,7 @@ package com.fischer.api;
 
 import com.fischer.api.exception.BizException;
 import com.fischer.assistant.AuthorizationService;
+import com.fischer.assistant.Util;
 import com.fischer.data.CommentData;
 import com.fischer.data.NewCommentParam;
 import com.fischer.jwt.JwtService;
@@ -59,8 +60,14 @@ public class CommentsApi {
     @GetMapping
     public ResponseEntity getComments(
             @PathVariable("slug") String slug,
-            @RequestHeader(value = "token")String token){
-        User user = jwtService.toUser(token).get();
+            @RequestHeader(value = "token",required = false)String token){
+        User user;
+        if(!Util.isEmpty(token)) {
+            user = jwtService.toUser(token).get();
+        }
+        else {
+            user=null;
+        }
         Article article = articleRepository.findBySlug(slug).orElseThrow(()->new BizException(HttpStatus.NOT_FOUND,"该文章已经不存在"));
         List<CommentData> commentDataList = commentQueryService.findByArticleId(article.getId(), user);
         return ResponseEntity.ok(

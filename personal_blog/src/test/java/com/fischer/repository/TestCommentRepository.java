@@ -1,10 +1,12 @@
 package com.fischer.repository;
 
+import com.fischer.api.exception.BizException;
 import com.fischer.pojo.Comment;
 import com.fischer.repository.CommentRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 
@@ -29,8 +31,8 @@ public class TestCommentRepository {
     public void testFind(){
         String articleId="e30e99ae-5bdf-4a3f-90fa-49cd18692eac";
         String id="33a3c2b7-0c1e-45ce-98b6-e4aa855f85ce";
-        Optional<Comment> comment = commentRepository.find(articleId, id);
-        System.out.println(comment.get());
+        Comment comment = commentRepository.find(articleId, id).orElseThrow(()->new BizException(HttpStatus.NOT_FOUND,"擦汗寻不到该破镜论"));
+        System.out.println(comment);
 
     }
     @Test

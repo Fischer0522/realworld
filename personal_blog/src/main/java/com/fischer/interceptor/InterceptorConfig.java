@@ -16,12 +16,13 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(myInterceptor())
-                .addPathPatterns("/**")
+                 .addPathPatterns("/**")
                 .excludePathPatterns("/users/login")
                 .excludePathPatterns("/users/register")
                 .excludePathPatterns("/articles/exact")
-                .excludePathPatterns("/articls/fuzzy")
+                .excludePathPatterns("/articles/fuzzy")
                 .excludePathPatterns("/img/**")
+                .excludePathPatterns("/articles/{slug}/comments")
                 .excludePathPatterns("/tags");
     }
 }
