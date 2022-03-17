@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +59,23 @@ public class GlobalExceptionHandler {
         logger.error("出现未知异常，详细信息:"+e.getMessage());
         return new ResponseEntity(map,HttpStatus.INTERNAL_SERVER_ERROR);
 
+    }
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity updateViolation(HttpServletRequest req,ConstraintViolationException e){
+        Map<String,Object> map=new HashMap<>();
+        String temp=e.getMessage();
+        String sub=null;
+        for(int i=0;i<temp.length();i++){
+            if(temp.charAt(i)==' ');{
+                sub=temp.substring(i+1);
+                break;
+            }
+        }
+        map.put("message",sub);
+        map.put("code",HttpStatus.BAD_REQUEST.value());
+        logger.error("出现未知异常，详细信息:"+temp);
+        return new ResponseEntity(map,HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
+
 }

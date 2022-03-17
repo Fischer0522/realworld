@@ -41,7 +41,7 @@ public class ArticleFavoriteApi {
     @PostMapping
     public ResponseEntity favoriteArticle(
             @PathVariable("slug") String slug,
-            @RequestHeader(value = "token")String token){
+            @RequestHeader(value = "Authorization")String token){
         User user = jwtService.toUser(token).get();
         Article article = articleRepository.findBySlug(slug).orElseThrow(()-> new BizException(HttpStatus.NOT_FOUND,"资源请求失败，要点赞的文章已经不存在"));
 
@@ -54,7 +54,7 @@ public class ArticleFavoriteApi {
     @DeleteMapping
     public ResponseEntity upfavoriteArticle(
             @PathVariable("slug") String slug,
-            @RequestHeader(value = "token")String token){
+            @RequestHeader(value = "Authorization")String token){
         User user = jwtService.toUser(token).get();
         Article article = articleRepository.findBySlug(slug).orElseThrow(()-> new BizException(HttpStatus.NOT_FOUND,"资源请求失败，该文章可能已经被删除"));
         Optional<ArticleFavorite> articleFavorite = articleFavoriteRepository.find(article.getId(), user.getId());

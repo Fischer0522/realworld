@@ -15,18 +15,16 @@ public class UserReadServiceImpl implements UserReadService {
     private UserDao userDao;
     @Override
     public UserData findByUsername(String username) {
-        LambdaQueryWrapper<User> lqw=new LambdaQueryWrapper<User>();
+        LambdaQueryWrapper<User> lqw=new LambdaQueryWrapper<>();
         lqw.eq(Strings.isNotEmpty(username),User::getUsername,username);
         User user = userDao.selectOne(lqw);
-        UserData userData=new UserData(user);
-        return userData;
+        return new UserData(user);
 
     }
 
     @Override
     public UserData findById(String id) {
         User user = userDao.selectById(id);
-        UserData userData=new UserData(user);
-        return userData;
+        return new UserData(user);
     }
 }

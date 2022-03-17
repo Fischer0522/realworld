@@ -32,7 +32,7 @@ public class Article {
     private String description;
     private String body;
     @TableField(exist = false)
-    private List<Tag> tags;
+    private List<Tag> tags=new LinkedList<>();
     @TableField(value = "created_at")
     private String createdAt;
     @TableField(value = "updated_at")
@@ -51,7 +51,9 @@ public class Article {
         this.title=title;
         this.description=description;
         this.body=body;
-        this.tags = new HashSet<>(tagList).stream().map(Tag::new).collect(toList());
+        if(tagList!=null) {
+            this.tags = new HashSet<>(tagList).stream().map(Tag::new).collect(toList());
+        }
         this.createdAt= TimeCursor.toTime(DateTime.now());
         this.updatedAt=TimeCursor.toTime(DateTime.now());
         this.userId=userId;
@@ -73,17 +75,8 @@ public class Article {
         }
     }
     public static String toSlug(String title) {
-        HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
-        format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
-        format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
-        String s = null;
-        try {
-            s = PinyinHelper.toHanYuPinyinString(title, format, "-", true);
-        } catch (BadHanyuPinyinOutputFormatCombination e) {
-            e.printStackTrace();
-        }
 
-        return s.toLowerCase().replaceAll("[\\&|[\\uFE30-\\uFFA0]|\\’|\\”|\\s\\?\\,\\.]+", "-");
+        return title.toLowerCase().replaceAll("[\\&|[\\uFE30-\\uFFA0]|\\’|\\”|\\s\\?\\,\\.]+", "-");
     }
 
 }

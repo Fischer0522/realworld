@@ -35,13 +35,12 @@ public class CommentReadServiceImpl implements CommentReadService {
         lqw.eq(Strings.isNotEmpty(id),Comment::getId,id);
         Comment comment = commentDao.selectOne(lqw);
         User user = userDao.selectById(comment.getUserId());
-        CommentData commentData=new CommentData(comment,user);
-        return commentData;
+        return new CommentData(comment,user);
 
     }
     @Override
     public List<CommentData> findByArticleId(String articleId) {
-        LambdaQueryWrapper<Comment> lqw=new LambdaQueryWrapper();
+        LambdaQueryWrapper<Comment> lqw=new LambdaQueryWrapper<>();
         lqw.eq(Strings.isNotEmpty(articleId),Comment::getArticleId,articleId);
         List<CommentData> commentDataList=new LinkedList<>();
         for (Comment comment : commentDao.selectList(lqw)) {

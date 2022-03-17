@@ -40,7 +40,6 @@ public class DefaultJwtService implements JwtService{
                 .compact();
         return token;
 
-
     }
 
     @Override
@@ -66,12 +65,15 @@ public class DefaultJwtService implements JwtService{
         }
         String id = subFromToken.get();
         User user = userDao.selectById(id);
-        return Optional.ofNullable(user);
+        if (user==null){
+            throw new BizException(HttpStatus.NOT_FOUND,"token解析失败，不存在该用户");
+        }
+        return Optional.of(user);
 
     }
 
     private Date expireTimeFromNow(){
-        return new Date(System.currentTimeMillis()+sessionTime*1000*7);
+        return new Date(System.currentTimeMillis()+ (long) sessionTime *1000*7);
     }
 
 

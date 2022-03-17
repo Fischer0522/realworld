@@ -19,7 +19,7 @@ public class TestProfileQueryService {
     @Test
     public void testFindByUserName(){
         User user = userDao.selectById("1234");
-        Optional<ProfileData> fischer = profileQueryService.finByUsername("fischer", user);
+        Optional<ProfileData> fischer = profileQueryService.finByUsername("fischer");
         System.out.println(fischer.get());
     }
 

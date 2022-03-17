@@ -15,12 +15,12 @@ public class ProfileQueryService {
     @Autowired
     private UserRepository userRepository;
 
-    public Optional<ProfileData> finByUsername(String username, User currentUser){
+    public Optional<ProfileData> finByUsername(String username){
         Optional<User> optional = userRepository.findByUsername(username);
         if(optional.isPresent()){
             User user= optional.get();
             ProfileData profileData=new ProfileData(user);
-            return Optional.ofNullable(profileData);
+            return Optional.of(profileData);
         }
         else{
             return Optional.empty();

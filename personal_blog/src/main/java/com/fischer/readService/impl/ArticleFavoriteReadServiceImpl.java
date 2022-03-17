@@ -39,8 +39,7 @@ public class ArticleFavoriteReadServiceImpl implements ArticleFavoriteReadServic
     public int articleFavoriteCount(String articleId) {
         LambdaQueryWrapper<ArticleFavorite>lqw=new LambdaQueryWrapper<>();
         lqw.eq(Strings.isNotEmpty(articleId),ArticleFavorite::getArticleId,articleId);
-        Integer integer = articleFavoriteDao.selectCount(lqw);
-        return integer;
+        return articleFavoriteDao.selectCount(lqw);
     }
 
     @Override

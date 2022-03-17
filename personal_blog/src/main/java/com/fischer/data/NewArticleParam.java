@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.util.LinkedList;
 import java.util.List;
 
 @Data
@@ -25,6 +26,6 @@ public class NewArticleParam {
     private String body;
 
 
-    private List<String> tagList;
+    private List<String> tagList=new LinkedList<>();
 
 }

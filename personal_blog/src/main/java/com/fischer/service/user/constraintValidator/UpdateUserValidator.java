@@ -1,9 +1,11 @@
 package com.fischer.service.user.constraintValidator;
 
+import com.fischer.api.exception.BizException;
 import com.fischer.pojo.User;
 import com.fischer.repository.UserRepository;
 import com.fischer.data.UpdateUserCommand;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -33,14 +35,17 @@ public class UpdateUserValidator implements ConstraintValidator<UpdateUserConstr
         else {
             context.disableDefaultConstraintViolation();
             if(!isEmailValid){
-                context.buildConstraintViolationWithTemplate("email already exist")
+                /*context.buildConstraintViolationWithTemplate("该邮箱已被别人注册")
                         .addPropertyNode("email")
-                        .addConstraintViolation();
+                        .addConstraintViolation();*/
+                throw new BizException(HttpStatus.BAD_REQUEST,"该邮箱已被别人注册");
             }
             if(!isUsernameValid){
-                context.buildConstraintViolationWithTemplate("username already exist")
+                throw new BizException(HttpStatus.BAD_REQUEST,"该用户名已经被别人所使用");
+                /*context.buildConstraintViolationWithTemplate("该用户名已经被别人使用")
                         .addPropertyNode("username")
-                        .addConstraintViolation();
+                        .addConstraintViolation();*/
+
             }
             return false;
         }

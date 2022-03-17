@@ -89,11 +89,11 @@ public class UsersApi {
 
     }
     @DeleteMapping("/users/logout")
-    public ResponseEntity userLogout(@RequestHeader(value = "token")String token){
+    public ResponseEntity userLogout(@RequestHeader(value = "Authorization")String token){
         String id = jwtService.getSubFromToken(token).get();
         String logoutId="loginUser:"+id;
         Boolean delete = redisTemplate.delete(logoutId);
-        if(delete==false){
+        if(Boolean.FALSE.equals(delete)){
             throw new BizException(HttpStatus.UNAUTHORIZED,"用户已经注销，请勿重新操作");
         }
         return ResponseEntity.noContent().build();

@@ -52,7 +52,7 @@ public class ArticleQueryServiceImpl extends ServiceImpl<ArticleDao, Article> im
             if(user!=null){
                 fillExtreInfo(id,user,articleData);
             }
-            return Optional.ofNullable(articleData);
+            return Optional.of(articleData);
         }
     }
 
@@ -66,7 +66,7 @@ public class ArticleQueryServiceImpl extends ServiceImpl<ArticleDao, Article> im
             if(user!=null){
                 fillExtreInfo(articleData.getId(),user,articleData);
             }
-            return Optional.ofNullable(articleData);
+            return Optional.of(articleData);
         }
     }
 

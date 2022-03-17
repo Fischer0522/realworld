@@ -1,6 +1,7 @@
 package com.fischer.readService.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.fischer.api.exception.BizException;
 import com.fischer.assistant.MyPage;
 import com.fischer.data.ArticleData;
 import com.fischer.pojo.Article;
@@ -10,6 +11,7 @@ import com.fischer.repository.ArticleRepository;
 import com.fischer.repository.UserRepository;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import java.util.LinkedList;
@@ -25,32 +27,44 @@ public class ArticleReadServiceImpl implements ArticleReadService {
     @Override
     public ArticleData findById(String id) {
         Optional<Article> article = articleRepository.findById(id);
+        if (!article.isPresent()){
+            return null;
+        }
         Optional<User> user = userRepository.findById(article.get().getUserId());
-        ArticleData articleData=new ArticleData(article.get(),user.get());
-        return articleData;
+        if(!user.isPresent()){
+            return null;
+        }
+        return new ArticleData(article.get(),user.get());
     }
 
     @Override
     public ArticleData findBySlug(String slug) {
         Optional<Article> article = articleRepository.findBySlug(slug);
-
+        if (!article.isPresent()){
+            return null;
+        }
         Optional<User> user = userRepository.findById(article.get().getUserId());
-        ArticleData articleData=new ArticleData(article.get(),user.get());
-        return articleData;
+        if(!user.isPresent()){
+            return null;
+        }
+        return new ArticleData(article.get(),user.get());
     }
 
     @Override
     public List<ArticleData> findArticles(List<String> articelIds) {
-        Optional<List<Article>> temp = articleRepository.findArticles(articelIds);
-        List<Article> articles= temp.get();
+        List<Article> articles = articleRepository
+                .findArticles(articelIds)
+                .orElseThrow(() -> new BizException(HttpStatus.NOT_FOUND, "文章不存在"));
+
         List<ArticleData> articleData=new LinkedList<>();
 
         for(Article article:articles)
         {
-            Optional<User> user = userRepository.findById(article.getUserId());
-            System.out.println("当前的文章是"+article.getTitle());
+            User user = userRepository
+                    .findById(article.getUserId())
+                    .orElseThrow(() -> new BizException(HttpStatus.NOT_FOUND, "数据出现错误！当前文章无匹配作者"));
 
-            ArticleData AD=new ArticleData(article,user.get());
+            ArticleData AD=new ArticleData(article,user);
             articleData.add(AD);
         }
         return articleData;
@@ -68,9 +82,11 @@ public class ArticleReadServiceImpl implements ArticleReadService {
 
         for(Article art:articles)
         {
-            Optional<User> user = userRepository.findById(art.getUserId());
+            User user = userRepository
+                    .findById(art.getUserId())
+                    .orElseThrow(()->new BizException(HttpStatus.NOT_FOUND,"数据出现错误！当前文章无匹配作者"));
 
-            ArticleData AD=new ArticleData(art,user.get());
+            ArticleData AD=new ArticleData(art,user);
             articleData.add(AD);
         }
         return articleData;

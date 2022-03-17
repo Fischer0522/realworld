@@ -20,14 +20,13 @@ public class CommentQueryServiceImpl implements CommentQueryService{
         }
         /*关注相关的功能日后再做*/
         else{
-          return Optional.ofNullable(commentData);
+          return Optional.of(commentData);
         }
     }
 
     @Override
     public List<CommentData> findByArticleId(String articleId, User user) {
-        List<CommentData> commentDataList = commentReadService.findByArticleId(articleId);
         /*关注相关的功能日后再做*/
-        return commentDataList;
+        return commentReadService.findByArticleId(articleId);
     }
 }

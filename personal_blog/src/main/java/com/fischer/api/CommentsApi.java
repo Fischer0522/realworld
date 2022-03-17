@@ -47,7 +47,7 @@ public class CommentsApi {
     @PostMapping
     public ResponseEntity<?> createComment(
             @PathVariable("slug") String slug,
-            @RequestHeader(value = "token") String token,
+            @RequestHeader(value = "Authorization") String token,
             @Valid  @RequestBody NewCommentParam newCommentParam){
         User user = jwtService.toUser(token).get();
         Article article = articleRepository.findBySlug(slug)
@@ -60,7 +60,7 @@ public class CommentsApi {
     @GetMapping
     public ResponseEntity getComments(
             @PathVariable("slug") String slug,
-            @RequestHeader(value = "token",required = false)String token){
+            @RequestHeader(value = "Authorization",required = false)String token){
         User user;
         if(!Util.isEmpty(token)) {
             user = jwtService.toUser(token).get();
@@ -81,7 +81,7 @@ public class CommentsApi {
     public ResponseEntity deleteComment(
             @PathVariable("slug") String slug,
             @PathVariable("id") String commentId,
-            @RequestHeader(value = "token")String token){
+            @RequestHeader(value = "Authorization")String token){
         User user = jwtService.toUser(token).get();
         Article article = articleRepository.findBySlug(slug).orElseThrow(()->new BizException(HttpStatus.NOT_FOUND,"该评论所属的文章已经不存在"));
         return commentRepository.find(article.getId(),commentId )

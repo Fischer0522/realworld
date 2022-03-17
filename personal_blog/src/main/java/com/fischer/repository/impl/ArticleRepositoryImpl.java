@@ -50,7 +50,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
         }
         else
         {
-            //article.setUpdatedAt(TimeCursor.toTime(DateTime.now()));
+
             articleDao.updateById(article);
         }
 
@@ -75,7 +75,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
     public Optional<Article> findById(String id) {
         Article article = articleDao.selectById(id);
         if(article==null){
-            throw new BizException(HttpStatus.NOT_FOUND,"资源请求失败，要操作的文章可能已经不存在");
+            return Optional.empty();
         }
         ArticleTagRelation articleTagRelation=new ArticleTagRelation();
         articleTagRelation.setArticleId(id);
@@ -89,7 +89,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
             List<Tag> tags = tagDao.selectBatchIds(tagIds);
             article.setTags(tags);
         }
-        return Optional.ofNullable(article);
+        return Optional.of(article);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
         QueryWrapper<Article> wrapper=new QueryWrapper<>(article);
         Article article1=articleDao.selectOne(wrapper);
         if(article1==null){
-            throw new BizException(HttpStatus.NOT_FOUND,"资源请求失败，要操作的文章可能已经不存在");
+            return Optional.empty();
         }
         ArticleTagRelation articleTagRelation=new ArticleTagRelation();
         articleTagRelation.setArticleId(article1.getId());
@@ -136,9 +136,6 @@ public class ArticleRepositoryImpl implements ArticleRepository {
             {
                 List<Tag> tags=tagDao.selectBatchIds(tagIds);
                 article.setTags(tags);
-            }
-            else{
-                article.setTags(new LinkedList<>());
             }
         }
         return Optional.ofNullable(articles);
@@ -179,9 +176,6 @@ public class ArticleRepositoryImpl implements ArticleRepository {
             {
                 List<Tag> tags=tagDao.selectBatchIds(tagIds);
                 record.setTags(tags);
-            }
-            else{
-                record.setTags(new LinkedList<Tag>());
             }
         }
 

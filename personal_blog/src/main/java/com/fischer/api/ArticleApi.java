@@ -46,7 +46,7 @@ public class ArticleApi {
     @GetMapping
     public ResponseEntity<?>article(
             @PathVariable("slug") String slug,
-            @RequestHeader(value ="token")String token){
+            @RequestHeader(value ="Authorization")String token){
         User user = jwtService.toUser(token).get();
         Optional<ArticleData> articleData = articleQueryService.findBySlug(slug, user);
             return articleData
@@ -58,7 +58,7 @@ public class ArticleApi {
     @PutMapping
     public ResponseEntity<?> updateArticle(
             @PathVariable("slug") String slug,
-           @RequestHeader(value = "token") String token,
+           @RequestHeader(value = "Authorization") String token,
             @Valid @RequestBody UpdateArticleParam updateArticleParam){
         User user = jwtService.toUser(token).get();
         return articleRepository
@@ -81,7 +81,7 @@ public class ArticleApi {
     @DeleteMapping
     public ResponseEntity deleteArticle(
             @PathVariable("slug") String slug,
-            @RequestHeader(value = "token")String token){
+            @RequestHeader(value = "Authorization")String token){
         User user = jwtService.toUser(token).get();
         return articleRepository.findBySlug(slug)
                 .map(article -> {

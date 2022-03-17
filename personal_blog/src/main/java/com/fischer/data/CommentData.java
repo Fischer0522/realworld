@@ -13,7 +13,6 @@ public class CommentData {
     @JsonIgnore
     private String articleId;
     private String createdAt;
-    //private String updatedAt;
 
     @JsonProperty
     private ProfileData profileData;

@@ -31,8 +31,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Image findById(String id) {
-        Image image = imageDao.selectById(id);
-        return image;
+        return imageDao.selectById(id);
     }
 
     @Override

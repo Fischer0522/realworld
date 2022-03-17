@@ -35,7 +35,7 @@ public class ArticlesApi {
     @PostMapping
     public ResponseEntity createArticle(
             @Valid @RequestBody NewArticleParam newArticleParam,
-            @RequestHeader(value = "token")String token){
+            @RequestHeader(value = "Authorization")String token){
         User user = jwtService.toUser(token).get();
         Article article = articleCommandService.createArticle(newArticleParam, user);
         return ResponseEntity.ok(
@@ -52,7 +52,7 @@ public class ArticlesApi {
             @RequestParam(value = "tag",required = false) String tag,
             @RequestParam(value = "favorited",required = false) String favoritedBy,
             @RequestParam(value = "author",required = false) String author,
-            @RequestHeader(value = "token",required = false)String token) {
+            @RequestHeader(value = "Authorization",required = false)String token) {
         User user;
         if(!Util.isEmpty(token)) {
             user = jwtService.toUser(token).get();
@@ -74,7 +74,7 @@ public class ArticlesApi {
             @RequestParam(value = "limit",defaultValue = "0") int limit,
             @RequestParam(value = "title",required = false) String title,
             @RequestParam(value = "description",required = false) String description,
-            @RequestHeader(value = "token",required = false) String token
+            @RequestHeader(value = "Authorization",required = false) String token
            ){
         User user;
         if(!Util.isEmpty(token)) {

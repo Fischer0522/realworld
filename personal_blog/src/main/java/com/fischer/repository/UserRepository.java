@@ -14,5 +14,4 @@ public interface UserRepository {
 
     Optional<User> findByEmail(String email);
 
-    //用户之间的关系日后再补充
 }

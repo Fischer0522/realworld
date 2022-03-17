@@ -38,7 +38,7 @@ public class CurrentUserApi {
     }
 
     @GetMapping
-    public ResponseEntity currentUser(@RequestHeader(value = "token")String token){
+    public ResponseEntity currentUser(@RequestHeader(value = "Authorization")String token){
         Optional<String> subFromToken = jwtService.getSubFromToken(token);
         if(subFromToken.isPresent()){
             String id=subFromToken.get();
@@ -53,7 +53,7 @@ public class CurrentUserApi {
     }
     @PutMapping
     public ResponseEntity updateProfile(
-            @RequestHeader(value = "token") String token,
+            @RequestHeader(value = "Authorization") String token,
             @Valid @RequestBody UpdateUserParam updateUserParam){
         User currentUser = jwtService.toUser(token).get();
         String userId = currentUser.getId();

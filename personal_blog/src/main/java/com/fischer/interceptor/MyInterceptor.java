@@ -19,7 +19,7 @@ public class MyInterceptor implements HandlerInterceptor {
     StringRedisTemplate redisTemplate;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String token = request.getHeader("token");
+        String token = request.getHeader("Authorization");
         if(Util.isEmpty(token)){
             throw new BizException(HttpStatus.UNAUTHORIZED,"未携带Token,请求被拦截");
         }
