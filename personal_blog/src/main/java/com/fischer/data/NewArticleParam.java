@@ -25,7 +25,8 @@ public class NewArticleParam {
     @NotBlank(message = "真的不再写几个字吗")
     private String body;
 
-
     private List<String> tagList=new LinkedList<>();
+
+    private List<String> imageList=new LinkedList<>();
 
 }

@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity(map,e.getStatus());
     }
 
-    //@ExceptionHandler(NullPointerException.class)
+    @ExceptionHandler(NullPointerException.class)
     public ResponseEntity nullPointerHandler(HttpServletRequest req,NullPointerException e){
         Map<String,Object> map=new HashMap<>();
         map.put("message","服务器出现异常，可能数据已不存在，请联系管理员");
@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
 
     }
 
-    //@ExceptionHandler(Exception.class)
+    @ExceptionHandler(Exception.class)
     public ResponseEntity unknowErrorException(HttpServletRequest req,Exception e){
         Map<String,Object> map=new HashMap<>();
         map.put("message","出现未知异常!请联系管理员");

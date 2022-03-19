@@ -29,11 +29,15 @@ public class TestArticleCommandService {
         tag.add("noob");
         tag.add("game");
         tag.add("fps");
+        List<String> image=new LinkedList<>();
+        image.add("123.jpg");
+        image.add("1222.jps");
         NewArticleParam articleParam=new NewArticleParam(
-                "call of duty",
+                "我学你",
                 "吸欧帝",
                 "年货",
-                tag
+                tag,
+                null
         );
         Optional<User> fishcer = userRepository.findByUsername("fischer");
         User user=fishcer.get();

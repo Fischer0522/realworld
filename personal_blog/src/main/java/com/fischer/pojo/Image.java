@@ -11,12 +11,12 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Image {
     private String imageId;
-    private String articleId;
+    private String articleSlug;
     private String imagePos;
 
-    public Image(String articleId,String imagePos){
+    public Image(String articleSlug,String imagePos){
         this.imagePos=imagePos;
-        this.articleId=articleId;
+        this.articleSlug=articleSlug;
         this.imageId= UUID.randomUUID().toString();
     }
 }

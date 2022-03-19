@@ -7,26 +7,18 @@ import com.fischer.service.article.ImageService;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
 public class ImageServiceImpl implements ImageService {
     @Autowired
     private ImageDao imageDao;
-    @Override
-    public List<Image> findByArticleId(String articleId) {
-        LambdaQueryWrapper<Image> lqw=new LambdaQueryWrapper<>();
-        lqw.eq(Strings.isNotEmpty(articleId),Image::getArticleId,articleId);
-        List<Image> images = imageDao.selectList(lqw);
-        if(images!=null){
-            return images;
-        }
-        else{
-            return new LinkedList<>();
-        }
 
+    @Override
+    public List<Image> findByArticleSlug(String articleSlug) {
+        LambdaQueryWrapper<Image> lqw=new LambdaQueryWrapper<>();
+        lqw.eq(Strings.isNotEmpty(articleSlug),Image::getArticleSlug,articleSlug);
+        return imageDao.selectList(lqw);
     }
 
     @Override

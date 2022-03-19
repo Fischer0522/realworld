@@ -9,10 +9,12 @@ import com.fischer.assistant.MyPage;
 import com.fischer.assistant.TimeCursor;
 import com.fischer.dao.ArticleDao;
 import com.fischer.dao.ArticleTagRelationDao;
+import com.fischer.dao.ImageDao;
 import com.fischer.dao.TagDao;
 import com.fischer.data.ArticleData;
 import com.fischer.pojo.Article;
 import com.fischer.pojo.ArticleTagRelation;
+import com.fischer.pojo.Image;
 import com.fischer.pojo.Tag;
 import com.fischer.repository.ArticleRepository;
 import org.apache.logging.log4j.util.Strings;
@@ -34,12 +36,18 @@ public class ArticleRepositoryImpl implements ArticleRepository {
     private ArticleDao articleDao;
     private TagDao tagDao;
     private ArticleTagRelationDao articleTagRelationDao;
+    private ImageDao imageDao;
     @Autowired
-    public ArticleRepositoryImpl (ArticleDao articleDao,TagDao tagDao,ArticleTagRelationDao articleTagRelationDao)
+    public ArticleRepositoryImpl (
+            ArticleDao articleDao,
+            TagDao tagDao,
+            ArticleTagRelationDao articleTagRelationDao,
+            ImageDao imageDao)
     {
         this.articleDao=articleDao;
         this.articleTagRelationDao=articleTagRelationDao;
         this.tagDao=tagDao;
+        this.imageDao=imageDao;
     }
     @Override
     @Transactional
@@ -68,6 +76,11 @@ public class ArticleRepositoryImpl implements ArticleRepository {
                 articleTagRelationDao.insert(articleTagRelation);
             }
         }
+        if(article.getImages()!=null){
+            for(Image image:article.getImages()){
+                imageDao.insert(image);
+            }
+        }
         articleDao.insert(article);
     }
 
@@ -89,6 +102,11 @@ public class ArticleRepositoryImpl implements ArticleRepository {
             List<Tag> tags = tagDao.selectBatchIds(tagIds);
             article.setTags(tags);
         }
+        String slug = article.getSlug();
+        LambdaQueryWrapper<Image> lqw=new LambdaQueryWrapper();
+        lqw.eq(Strings.isNotEmpty(slug),Image::getArticleSlug,slug);
+        List<Image> images = imageDao.selectList(lqw);
+        article.setImages(images);
         return Optional.of(article);
     }
 
@@ -113,8 +131,12 @@ public class ArticleRepositoryImpl implements ArticleRepository {
             List<Tag> tags = tagDao.selectBatchIds(tagIds);
             article1.setTags(tags);
         }
+        LambdaQueryWrapper<Image> lqw=new LambdaQueryWrapper();
+        lqw.eq(Strings.isNotEmpty(slug),Image::getArticleSlug,slug);
+        List<Image> images = imageDao.selectList(lqw);
+        article1.setImages(images);
 
-        return Optional.ofNullable(article1);
+        return Optional.of(article1);
     }
 
 
@@ -137,6 +159,12 @@ public class ArticleRepositoryImpl implements ArticleRepository {
                 List<Tag> tags=tagDao.selectBatchIds(tagIds);
                 article.setTags(tags);
             }
+            String slug = article.getSlug();
+            LambdaQueryWrapper<Image> lqw=new LambdaQueryWrapper();
+            lqw.eq(Strings.isNotEmpty(slug),Image::getArticleSlug,slug);
+            List<Image> images = imageDao.selectList(lqw);
+            article.setImages(images);
+
         }
         return Optional.ofNullable(articles);
     }

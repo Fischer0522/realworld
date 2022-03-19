@@ -33,6 +33,8 @@ public class Article {
     private String body;
     @TableField(exist = false)
     private List<Tag> tags=new LinkedList<>();
+    @TableField(exist = false)
+    private List<Image> images=new LinkedList<>();
     @TableField(value = "created_at")
     private String createdAt;
     @TableField(value = "updated_at")
@@ -43,8 +45,36 @@ public class Article {
             String description,
             String body,
             List<String> tagList,
+            List<String> imagesName,
             String userId
             )
+    {
+        this.id= UUID.randomUUID().toString();
+        this.slug=toSlug(title);
+        this.title=title;
+        this.description=description;
+        this.body=body;
+        if(tagList!=null) {
+            this.tags = new HashSet<>(tagList).stream().map(Tag::new).collect(toList());
+        }
+        if(imagesName!= null){
+            for(String name:imagesName){
+                this.images.add(new Image(toSlug(title),name));
+            }
+        }
+        this.createdAt= TimeCursor.toTime(DateTime.now());
+        this.updatedAt=TimeCursor.toTime(DateTime.now());
+        this.userId=userId;
+
+    }
+
+    public Article(
+            String title,
+            String description,
+            String body,
+            List<String> tagList,
+            String userId
+    )
     {
         this.id= UUID.randomUUID().toString();
         this.slug=toSlug(title);

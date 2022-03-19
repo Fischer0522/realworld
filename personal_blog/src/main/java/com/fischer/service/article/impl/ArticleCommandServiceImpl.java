@@ -23,6 +23,7 @@ public class ArticleCommandServiceImpl implements ArticleCommandService {
                         newArticleParam.getDescription(),
                         newArticleParam.getBody(),
                         newArticleParam.getTagList(),
+                        newArticleParam.getImageList(),
                         userId
                 );
         articleRepository.save(article);

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ImageService {
 
-    List<Image> findByArticleId(String articleId);
+    List<Image> findByArticleSlug(String articleSlug);
 
     Image findById(String id);
 
