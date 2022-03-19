@@ -144,6 +144,11 @@ public class ArticleRepositoryImpl implements ArticleRepository {
     @Override
     public void remove(Article article) {
         articleDao.deleteById(article.getId());
+        if(!article.getTags().isEmpty()) {
+            List<String> collect = article.getTags().stream().map(Tag::getId).collect(toList());
+            tagDao.deleteBatchIds(collect);
+        }
+
 
     }
 

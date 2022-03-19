@@ -164,5 +164,10 @@ public class TestAriticleRepository {
         System.out.println(articles.get());
 
     }
+    @Test
+    void testDelete(){
+        Article article = articleRepository.findById("6b7dae4c-21fb-408d-a7b9-ccea491efb29").get();
+        articleRepository.remove(article);
+    }
 
 }
