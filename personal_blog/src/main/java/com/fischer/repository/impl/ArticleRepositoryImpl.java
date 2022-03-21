@@ -19,6 +19,8 @@ import com.fischer.pojo.Tag;
 import com.fischer.repository.ArticleRepository;
 import org.apache.logging.log4j.util.Strings;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
@@ -37,6 +39,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
     private TagDao tagDao;
     private ArticleTagRelationDao articleTagRelationDao;
     private ImageDao imageDao;
+    private static  final Logger logger=LoggerFactory.getLogger(ArticleRepositoryImpl.class);
     @Autowired
     public ArticleRepositoryImpl (
             ArticleDao articleDao,
@@ -172,16 +175,27 @@ public class ArticleRepositoryImpl implements ArticleRepository {
         articleDao.deleteById(article.getId());
         if(!article.getTags().isEmpty()) {
             List<String> collect = article.getTags().stream().map(Tag::getId).collect(toList());
-            tagDao.deleteBatchIds(collect);
             for (String tag:collect){
+
                 LambdaQueryWrapper<ArticleTagRelation> lqw=new LambdaQueryWrapper<>();
                 lqw.eq(ArticleTagRelation::getTagId,tag);
                 Integer integer = articleTagRelationDao.selectCount(lqw);
                 if(integer==1){
-                    tagDao.deleteById(tag);
+                   tagDao.deleteById(tag);
                 }
-                articleTagRelationDao.delete(lqw);
             }
+            //删除与该文章有关的所有关系链
+            LambdaQueryWrapper<ArticleTagRelation> lqw=new LambdaQueryWrapper<>();
+            lqw.eq(ArticleTagRelation::getArticleId,article.getId());
+            articleTagRelationDao.delete(lqw);
+
+
+            /*ArticleTagRelation a=new ArticleTagRelation();
+            a.setArticleId(article.getId());
+            QueryWrapper<ArticleTagRelation> wrapper=new QueryWrapper<>(a);
+            articleTagRelationDao.delete(wrapper);*/
+
+
 
         }
         if(!article.getImages().isEmpty()){
