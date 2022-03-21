@@ -2,6 +2,7 @@ package com.fischer.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fischer.pojo.Article;
+import com.fischer.pojo.Image;
 import com.fischer.pojo.Tag;
 import com.fischer.pojo.User;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,7 @@ public class ArticleData {
     private String createdAt;
     private String updatedAt;
     private List<String> tagList=new LinkedList<>();
+    private List<String> imageList=new LinkedList<>();
     @JsonProperty(value = "author")
     private ProfileData profileData;
 
@@ -48,6 +50,7 @@ public class ArticleData {
         this.createdAt=article.getCreatedAt();
         this.updatedAt=article.getUpdatedAt();
         this.tagList = article.getTags().stream().map(Tag::getName).collect(Collectors.toList());
+        this.imageList=article.getImages().stream().map(Image::getImagePos).collect(Collectors.toList());
         this.profileData=new ProfileData(user);
 
     }

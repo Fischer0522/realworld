@@ -42,8 +42,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
             ArticleDao articleDao,
             TagDao tagDao,
             ArticleTagRelationDao articleTagRelationDao,
-            ImageDao imageDao)
-    {
+            ImageDao imageDao) {
         this.articleDao=articleDao;
         this.articleTagRelationDao=articleTagRelationDao;
         this.tagDao=tagDao;
@@ -58,7 +57,6 @@ public class ArticleRepositoryImpl implements ArticleRepository {
         }
         else
         {
-
             articleDao.updateById(article);
         }
 
@@ -175,6 +173,22 @@ public class ArticleRepositoryImpl implements ArticleRepository {
         if(!article.getTags().isEmpty()) {
             List<String> collect = article.getTags().stream().map(Tag::getId).collect(toList());
             tagDao.deleteBatchIds(collect);
+            for (String tag:collect){
+                LambdaQueryWrapper<ArticleTagRelation> lqw=new LambdaQueryWrapper<>();
+                lqw.eq(ArticleTagRelation::getTagId,tag);
+                Integer integer = articleTagRelationDao.selectCount(lqw);
+                if(integer==1){
+                    tagDao.deleteById(tag);
+                }
+                articleTagRelationDao.delete(lqw);
+            }
+
+        }
+        if(!article.getImages().isEmpty()){
+            String slug = article.getSlug();
+            LambdaQueryWrapper<Image>lqw=new LambdaQueryWrapper<>();
+            lqw.eq(Image::getArticleSlug,slug);
+            imageDao.delete(lqw);
         }
 
 
@@ -210,6 +224,17 @@ public class ArticleRepositoryImpl implements ArticleRepository {
                 List<Tag> tags=tagDao.selectBatchIds(tagIds);
                 record.setTags(tags);
             }
+            String slug = record.getSlug();
+            LambdaQueryWrapper<Image> lqwImage=new LambdaQueryWrapper<>();
+            lqwImage.eq(Image::getArticleSlug,slug);
+            List<Image> images = imageDao.selectList(lqwImage);
+            if(!images.isEmpty()){
+                record.setImages(images);
+            }
+            else{
+                record.setImages(new LinkedList<>());
+            }
+
         }
 
         return p;

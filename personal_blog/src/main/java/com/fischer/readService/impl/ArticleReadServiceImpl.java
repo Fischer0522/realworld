@@ -3,6 +3,7 @@ package com.fischer.readService.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fischer.api.exception.BizException;
 import com.fischer.assistant.MyPage;
+import com.fischer.dao.ImageDao;
 import com.fischer.data.ArticleData;
 import com.fischer.pojo.Article;
 import com.fischer.pojo.User;
@@ -20,10 +21,20 @@ import java.util.Optional;
 
 @Repository
 public class ArticleReadServiceImpl implements ArticleReadService {
-    @Autowired
+
     private ArticleRepository articleRepository;
-    @Autowired
+
     private UserRepository userRepository;
+    private ImageDao imageDao;
+    @Autowired
+    public ArticleReadServiceImpl(
+            ArticleRepository articleRepository,
+            UserRepository userRepository,
+            ImageDao imageDao){
+        this.imageDao=imageDao;
+        this.articleRepository=articleRepository;
+        this.userRepository=userRepository;
+    }
     @Override
     public ArticleData findById(String id) {
         Optional<Article> article = articleRepository.findById(id);
