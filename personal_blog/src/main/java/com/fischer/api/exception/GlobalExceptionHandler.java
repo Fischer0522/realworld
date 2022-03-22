@@ -65,16 +65,17 @@ public class GlobalExceptionHandler {
         Map<String,Object> map=new HashMap<>();
         String temp=e.getMessage();
         String sub=null;
-        for(int i=0;i<temp.length();i++){
-            if(temp.charAt(i)==' ');{
-                sub=temp.substring(i+1);
-                break;
+        for(int i=0;i<temp.length()-1;i++){
+
+            String su=temp.substring(i,i+1);
+            if(su.equals(":")){
+                sub=temp.substring(i+2);
             }
         }
         map.put("message",sub);
         map.put("code",HttpStatus.BAD_REQUEST.value());
-        logger.error("出现未知异常，详细信息:"+temp);
-        return new ResponseEntity(map,HttpStatus.INTERNAL_SERVER_ERROR);
+        logger.error("出现未知异常，详细信息:"+sub);
+        return new ResponseEntity(map,HttpStatus.BAD_REQUEST);
 
     }
 

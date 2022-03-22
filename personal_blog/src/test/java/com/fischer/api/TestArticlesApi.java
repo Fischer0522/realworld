@@ -102,9 +102,19 @@ public class TestArticlesApi {
     }
     @Test
     void  test03(){
-        double random = Math.random();
-        int i=(int) (random*9999);
-        System.out.println("请在5分钟内尽快填写验证码，完成注册\n"+"验证码为："+i);
+        String temp="pdateUser.command.email: 该邮箱已被别人注册";
+        System.out.println(temp.length());
+        String sub=null;
+        for(int i=0;i<temp.length()-1;i++){
+
+           String su=temp.substring(i,i+1);
+           if(su.equals(":")){
+               sub=temp.substring(i+2);
+           }
+            //System.out.println(su);
+        }
+        System.out.println(sub);
+
     }
 
 }

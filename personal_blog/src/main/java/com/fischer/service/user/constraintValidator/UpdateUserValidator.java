@@ -35,22 +35,20 @@ public class UpdateUserValidator implements ConstraintValidator<UpdateUserConstr
         else {
             context.disableDefaultConstraintViolation();
             if(!isEmailValid){
-                /*context.buildConstraintViolationWithTemplate("该邮箱已被别人注册")
+                context.buildConstraintViolationWithTemplate("该邮箱已被别人注册")
                         .addPropertyNode("email")
-                        .addConstraintViolation();*/
-                throw new BizException(HttpStatus.BAD_REQUEST,"该邮箱已被别人注册");
+                        .addConstraintViolation();
+               // throw new BizException(HttpStatus.BAD_REQUEST,"该邮箱已被别人注册");
             }
             if(!isUsernameValid){
-                throw new BizException(HttpStatus.BAD_REQUEST,"该用户名已经被别人所使用");
-                /*context.buildConstraintViolationWithTemplate("该用户名已经被别人使用")
+                //throw new BizException(HttpStatus.BAD_REQUEST,"该用户名已经被别人所使用");
+                context.buildConstraintViolationWithTemplate("该用户名已经被别人使用")
                         .addPropertyNode("username")
-                        .addConstraintViolation();*/
+                        .addConstraintViolation();
 
             }
             return false;
         }
-
-
 
     }
 

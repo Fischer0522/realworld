@@ -54,8 +54,7 @@ public class TestArticleCommandService {
                 null,
                 "薯条来咯"
         );
-        Article article1 = articleCommandService.updateArticle(article, updateArticleParam);
-        System.out.println(article1);
+
 
 
     }

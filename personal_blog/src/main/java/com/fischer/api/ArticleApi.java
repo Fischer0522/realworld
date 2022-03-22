@@ -69,8 +69,8 @@ public class ArticleApi {
                         throw  new BizException(HttpStatus.FORBIDDEN,"非常抱歉，您没有权限对该文章进行修改");
                     }
                     else{
-                        Article updateArticle = articleCommandService.updateArticle(article, updateArticleParam);
                         UpdateArticleCommand updateArticleCommand=new UpdateArticleCommand(article,updateArticleParam);
+                        Article updateArticle = articleCommandService.updateArticle(updateArticleCommand);
                         return ResponseEntity.ok(
                                 articleResponse(articleQueryService.findBySlug(updateArticle.getSlug(),user).get()));
 

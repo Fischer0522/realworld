@@ -1,6 +1,7 @@
 package com.fischer.service.article.impl;
 
 import com.fischer.data.NewArticleParam;
+import com.fischer.data.UpdateArticleCommand;
 import com.fischer.data.UpdateArticleParam;
 import com.fischer.pojo.Article;
 import com.fischer.pojo.User;
@@ -34,7 +35,9 @@ public class ArticleCommandServiceImpl implements ArticleCommandService {
     }
 
     @Override
-    public Article updateArticle(Article article,@Valid UpdateArticleParam updateArticleParam) {
+    public Article updateArticle(@Valid UpdateArticleCommand updateArticleCommand) {
+        Article article = updateArticleCommand.getTargetArticle();
+        UpdateArticleParam updateArticleParam = updateArticleCommand.getUpdateArticleParam();
         article.update(
                 updateArticleParam.getTitle(),
                 updateArticleParam.getDescription(),
