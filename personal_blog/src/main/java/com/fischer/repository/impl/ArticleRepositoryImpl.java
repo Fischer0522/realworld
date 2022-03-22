@@ -4,32 +4,24 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.fischer.api.exception.BizException;
 import com.fischer.assistant.MyPage;
-import com.fischer.assistant.TimeCursor;
 import com.fischer.dao.ArticleDao;
 import com.fischer.dao.ArticleTagRelationDao;
-import com.fischer.dao.ImageDao;
 import com.fischer.dao.TagDao;
-import com.fischer.data.ArticleData;
 import com.fischer.pojo.Article;
 import com.fischer.pojo.ArticleTagRelation;
 import com.fischer.pojo.Image;
 import com.fischer.pojo.Tag;
 import com.fischer.repository.ArticleRepository;
+import com.fischer.repository.ImageRepository;
 import org.apache.logging.log4j.util.Strings;
-import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -38,18 +30,17 @@ public class ArticleRepositoryImpl implements ArticleRepository {
     private ArticleDao articleDao;
     private TagDao tagDao;
     private ArticleTagRelationDao articleTagRelationDao;
-    private ImageDao imageDao;
-    private static  final Logger logger=LoggerFactory.getLogger(ArticleRepositoryImpl.class);
+    private ImageRepository imageRepository;
     @Autowired
     public ArticleRepositoryImpl (
             ArticleDao articleDao,
             TagDao tagDao,
             ArticleTagRelationDao articleTagRelationDao,
-            ImageDao imageDao) {
+            ImageRepository imageRepository) {
         this.articleDao=articleDao;
         this.articleTagRelationDao=articleTagRelationDao;
         this.tagDao=tagDao;
-        this.imageDao=imageDao;
+        this.imageRepository=imageRepository;
     }
     @Override
     @Transactional
@@ -77,11 +68,15 @@ public class ArticleRepositoryImpl implements ArticleRepository {
                 articleTagRelationDao.insert(articleTagRelation);
             }
         }
-        if(article.getImages()!=null){
+        /*if(article.getImages()!=null){
             for(Image image:article.getImages()){
                 imageDao.insert(image);
             }
+        }*/
+        if(!article.getImages().isEmpty()){
+            imageRepository.addImage(article.getImages());
         }
+
         articleDao.insert(article);
     }
 
@@ -104,9 +99,10 @@ public class ArticleRepositoryImpl implements ArticleRepository {
             article.setTags(tags);
         }
         String slug = article.getSlug();
-        LambdaQueryWrapper<Image> lqw=new LambdaQueryWrapper();
+        /*LambdaQueryWrapper<Image> lqw=new LambdaQueryWrapper();
         lqw.eq(Strings.isNotEmpty(slug),Image::getArticleSlug,slug);
-        List<Image> images = imageDao.selectList(lqw);
+        List<Image> images = imageDao.selectList(lqw);*/
+        List<Image> images = imageRepository.findByArticleSlug(slug);
         article.setImages(images);
         return Optional.of(article);
     }
@@ -132,9 +128,10 @@ public class ArticleRepositoryImpl implements ArticleRepository {
             List<Tag> tags = tagDao.selectBatchIds(tagIds);
             article1.setTags(tags);
         }
-        LambdaQueryWrapper<Image> lqw=new LambdaQueryWrapper();
+        /*LambdaQueryWrapper<Image> lqw=new LambdaQueryWrapper();
         lqw.eq(Strings.isNotEmpty(slug),Image::getArticleSlug,slug);
-        List<Image> images = imageDao.selectList(lqw);
+        List<Image> images = imageDao.selectList(lqw);*/
+        List<Image> images = imageRepository.findByArticleSlug(slug);
         article1.setImages(images);
 
         return Optional.of(article1);
@@ -161,9 +158,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
                 article.setTags(tags);
             }
             String slug = article.getSlug();
-            LambdaQueryWrapper<Image> lqw=new LambdaQueryWrapper();
-            lqw.eq(Strings.isNotEmpty(slug),Image::getArticleSlug,slug);
-            List<Image> images = imageDao.selectList(lqw);
+            List<Image> images = imageRepository.findByArticleSlug(slug);
             article.setImages(images);
 
         }
@@ -199,10 +194,11 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 
         }
         if(!article.getImages().isEmpty()){
-            String slug = article.getSlug();
+            /*String slug = article.getSlug();
             LambdaQueryWrapper<Image>lqw=new LambdaQueryWrapper<>();
             lqw.eq(Image::getArticleSlug,slug);
-            imageDao.delete(lqw);
+            imageDao.delete(lqw);*/
+            imageRepository.removeBySlug(article.getSlug());
         }
 
 
@@ -239,9 +235,10 @@ public class ArticleRepositoryImpl implements ArticleRepository {
                 record.setTags(tags);
             }
             String slug = record.getSlug();
-            LambdaQueryWrapper<Image> lqwImage=new LambdaQueryWrapper<>();
+            /*LambdaQueryWrapper<Image> lqwImage=new LambdaQueryWrapper<>();
             lqwImage.eq(Image::getArticleSlug,slug);
-            List<Image> images = imageDao.selectList(lqwImage);
+            List<Image> images = imageDao.selectList(lqwImage);*/
+            List<Image> images = imageRepository.findByArticleSlug(slug);
             if(!images.isEmpty()){
                 record.setImages(images);
             }
@@ -253,6 +250,5 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 
         return p;
     }
-
 
 }

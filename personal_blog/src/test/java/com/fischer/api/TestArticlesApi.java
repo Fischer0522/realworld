@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.io.File;
 import java.util.Arrays;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -69,5 +70,35 @@ public class TestArticlesApi {
         }
 
 
+
     }
+    @Test
+    void testFile(){
+
+        String path="http://localhost:8080/img/2022/03/22/724c2c84-daf9-49b5-a062-f9a10655219a.jpg";
+        int pos=0;
+        for(int i=0;i<path.length()-3;i++){
+
+            String substring = path.substring(i, i + 3);
+            if (substring.equals("img")){
+                System.out.println(substring);
+                System.out.println(i);
+                pos=i;
+            }
+
+        }
+        String subpath=path.substring(pos);
+        String realpath="D:/learn_software/program_file/IDEAProgject/personal_blog/src/main/resources/static/"+subpath;
+        System.out.println(subpath);
+        System.out.println(realpath);
+
+
+        /*File dest=new File("D:\\learn_software\\program_file\\IDEAProgject\\personal_blog\\src\\main\\resources\\static\\img\\2022\\03\\21\\e4cf3060-12dd-4420-a6d8-4180fd0a2146.jpg");
+
+        if(dest.exists()){
+            dest.delete();
+        }*/
+
+    }
+
 }

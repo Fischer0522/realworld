@@ -68,6 +68,8 @@ public class ArticlesApi {
                 user);
         return ResponseEntity.ok(recentArticles);
     }
+
+
     @GetMapping(path="fuzzy")
     public ResponseEntity getArticlesFuzzy(
             @RequestParam(value = "offset",defaultValue ="0") int offset,

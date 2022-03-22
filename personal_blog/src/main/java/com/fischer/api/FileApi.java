@@ -34,7 +34,7 @@ public class FileApi {
         return ResponseEntity.ok(
                 new HashMap<String,Object>(){
                     {
-                        put("ImageLocations",fileNames);
+                        put("imageList",fileNames);
                     }
                 }
         );
