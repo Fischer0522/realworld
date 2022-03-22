@@ -100,5 +100,11 @@ public class TestArticlesApi {
         }*/
 
     }
+    @Test
+    void  test03(){
+        double random = Math.random();
+        int i=(int) (random*9999);
+        System.out.println("请在5分钟内尽快填写验证码，完成注册\n"+"验证码为："+i);
+    }
 
 }

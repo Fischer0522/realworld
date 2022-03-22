@@ -18,19 +18,7 @@ public class TestUserService {
     private UserService userService;
     @Autowired
     private UserDao userDao;
-    @Test
-    public void testCreateUser(){
 
-
-        RegisterParam registerParam=new RegisterParam(
-                "18763169159@qq.com",
-                "Hades",
-                "123"
-        );
-        User user = userService.createUser(registerParam);
-        System.out.println(user);
-
-    }
     @Test
     public void testUpdateUser(){
 

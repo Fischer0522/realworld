@@ -9,13 +9,16 @@ import com.fischer.service.article.ArticleCommandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+
+import javax.validation.Valid;
+
 @Service
 @Validated
 public class ArticleCommandServiceImpl implements ArticleCommandService {
     @Autowired
     private ArticleRepository articleRepository;
     @Override
-    public Article createArticle(NewArticleParam newArticleParam ,User creator ) {
+    public Article createArticle( @Valid NewArticleParam newArticleParam ,User creator ) {
         String userId=creator.getId();
         Article article=
                 new Article
@@ -31,7 +34,7 @@ public class ArticleCommandServiceImpl implements ArticleCommandService {
     }
 
     @Override
-    public Article updateArticle(Article article,UpdateArticleParam updateArticleParam) {
+    public Article updateArticle(Article article,@Valid UpdateArticleParam updateArticleParam) {
         article.update(
                 updateArticleParam.getTitle(),
                 updateArticleParam.getDescription(),

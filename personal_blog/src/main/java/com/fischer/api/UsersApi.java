@@ -57,6 +57,15 @@ public class UsersApi {
     @PostMapping(path = "/users/register")
     public ResponseEntity createUser(@Valid @RequestBody RegisterParam registerParam){
 
+        String verifyCode = registerParam.getVerifyCode();
+        String s = redisTemplate.opsForValue().get(registerParam.getEmail());
+        System.out.println(verifyCode);
+        System.out.println(s);
+        if(!verifyCode.equals(s)){
+
+            throw new BizException(HttpStatus.BAD_REQUEST,"验证码错误,请重新获取");
+        }
+
         User user=userService.createUser(registerParam);
         UserData userData = userQueryService.finById(user.getId()).get();
 
@@ -74,6 +83,7 @@ public class UsersApi {
                 loginParam.getPassword()
                         .equals(byEmail.get().getPassword())){
             User user = byEmail.get();
+
             String loginId="loginUser:"+user.getId();
             redisTemplate.opsForValue().set(loginId,user.getUsername());
             Duration duration=Duration.ofDays(7);

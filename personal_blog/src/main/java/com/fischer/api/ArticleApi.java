@@ -3,6 +3,7 @@ package com.fischer.api;
 import com.fischer.api.exception.BizException;
 import com.fischer.assistant.AuthorizationService;
 import com.fischer.data.ArticleData;
+import com.fischer.data.UpdateArticleCommand;
 import com.fischer.data.UpdateArticleParam;
 import com.fischer.jwt.JwtService;
 import com.fischer.pojo.Article;
@@ -69,6 +70,7 @@ public class ArticleApi {
                     }
                     else{
                         Article updateArticle = articleCommandService.updateArticle(article, updateArticleParam);
+                        UpdateArticleCommand updateArticleCommand=new UpdateArticleCommand(article,updateArticleParam);
                         return ResponseEntity.ok(
                                 articleResponse(articleQueryService.findBySlug(updateArticle.getSlug(),user).get()));
 

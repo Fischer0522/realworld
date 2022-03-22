@@ -20,4 +20,5 @@ public class LoginParam {
     private String email;
     @NotBlank(message = "密码不能为空")
     private String password;
+
 }
