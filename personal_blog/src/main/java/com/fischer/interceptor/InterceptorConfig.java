@@ -29,7 +29,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/articles/{slug}/comments")
                 .excludePathPatterns("/tags")
                 .excludePathPatterns("/email")
-                .excludePathPatterns("/profiles/**");
+                .excludePathPatterns("/profiles/{username}");
     }
 
     @Override

@@ -21,7 +21,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 public class UpdateUserParam {
     @Builder.Default
-    @Email(message = "请输入正确的邮箱格式")
+    //@Email(message = "请输入正确的邮箱格式")
     private String email="";
 
     @Builder.Default

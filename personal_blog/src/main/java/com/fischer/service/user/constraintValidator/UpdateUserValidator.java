@@ -18,6 +18,13 @@ public class UpdateUserValidator implements ConstraintValidator<UpdateUserConstr
     public boolean isValid(UpdateUserCommand value, ConstraintValidatorContext context) {
         String inputEmail=value.getParam().getEmail();
         String inputUsername=value.getParam().getUsername();
+        if(!inputEmail.matches("^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$" )){
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate("邮箱格式不正确")
+                    .addPropertyNode("email")
+                    .addConstraintViolation();
+            return false;
+        }
         final User targetUser=value.getTargetUser();
         boolean isEmailValid =
                 userRepository.findByEmail(inputEmail)

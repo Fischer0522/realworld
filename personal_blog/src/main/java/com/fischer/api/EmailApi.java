@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.Random;
 
 @RestController
@@ -46,15 +47,21 @@ public class EmailApi {
 
         //将验证码发送给用户
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        javaMailSender.setUsername(username);
-        javaMailSender.setPassword(password);
-        javaMailSender.setHost(host);
-        simpleMailMessage.setFrom(username);
-        simpleMailMessage.setTo(userEmail);
-        simpleMailMessage.setSubject("登录验证码");
-        simpleMailMessage.setText("请在5分钟内尽快填写验证码，完成注册\n"+"验证码为："+i);
-        javaMailSender.send(simpleMailMessage);
-        return ResponseEntity.ok("验证码已经发送");
+                javaMailSender.setUsername(username);
+                javaMailSender.setPassword(password);
+                javaMailSender.setHost(host);
+                simpleMailMessage.setFrom(username);
+                simpleMailMessage.setTo(userEmail);
+                simpleMailMessage.setSubject("登录验证码");
+                simpleMailMessage.setText("请在5分钟内尽快填写验证码，完成注册\n"+"验证码为："+i);
+                javaMailSender.send(simpleMailMessage);
+
+        return ResponseEntity.ok(new HashMap<String,Object>(){
+            {
+                put("code",200);
+                put("message","验证码已经成功发送");
+            }
+        });
     }
 
 
