@@ -1,5 +1,6 @@
 package com.fischer.api.exception;
 
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
@@ -9,6 +10,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
@@ -34,7 +36,7 @@ public class GlobalExceptionHandler {
         Map<String,Object> map=new HashMap<>();
         map.put("message","服务器出现异常，可能数据已不存在，请联系管理员");
         map.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        logger.error("发生空指针异常");
+        logger.error("发生空指针异常"+e.getMessage());
         return new ResponseEntity(map, HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
@@ -49,6 +51,15 @@ public class GlobalExceptionHandler {
         map.put("code",HttpStatus.BAD_REQUEST.value());
         return new ResponseEntity(map,HttpStatus.BAD_REQUEST);
 
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity sizeLimit(HttpServletRequest req,MaxUploadSizeExceededException e){
+        Map<String,Object> map=new HashMap<>();
+        map.put("message","上传的文件超出限制，请上传3m以下的文件");
+        map.put("code",HttpStatus.BAD_REQUEST.value());
+        logger.error(e.getMessage());
+        return new ResponseEntity(map,HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
@@ -78,5 +89,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity(map,HttpStatus.BAD_REQUEST);
 
     }
+
 
 }

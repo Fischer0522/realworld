@@ -1,4 +1,9 @@
 spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 2MB   #单个文件的最大上限
+      max-request-size: 3MB #单个请求的文件总大小上限
   web:
     resources:
       static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${web.upload-path}
@@ -20,6 +25,7 @@ spring:
         min-idle: 0
         max-wait: 1000ms
 
+
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
@@ -33,6 +39,7 @@ jwt:
 
 web:
   upload-path: D:\learn_software\program_file\IDEAProgject\personal_blog\src\main\resources\static\img\
+  realpath: D:/learn_software/program_file/IDEAProgject/personal_blog/src/main/resources/static/
 
 
 mail:

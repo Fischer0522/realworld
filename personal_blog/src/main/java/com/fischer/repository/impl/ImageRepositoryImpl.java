@@ -6,6 +6,7 @@ import com.fischer.pojo.Image;
 import com.fischer.repository.ImageRepository;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
@@ -15,6 +16,8 @@ import java.util.List;
 public class ImageRepositoryImpl implements ImageRepository {
     @Autowired
     private ImageDao imageDao;
+    @Value("${web.realpath}")
+    private String rootpath;
 
     @Override
     public List<Image> findByArticleSlug(String articleSlug) {
@@ -56,7 +59,7 @@ public class ImageRepositoryImpl implements ImageRepository {
 
         }
         String subpath=path.substring(pos);
-        String realpath="D:/learn_software/program_file/IDEAProgject/personal_blog/src/main/resources/static/"+subpath;
+        String realpath=rootpath+subpath;
         File dest=new File(realpath);
         if(dest.exists()){
             dest.delete();
