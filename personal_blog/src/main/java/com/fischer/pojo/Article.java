@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import com.fischer.pojo.Tag;
 import static java.util.stream.Collectors.toList;
 @Data
-@TableName(value = "Articles")
+@TableName(value = "articles")
 @NoArgsConstructor
 public class Article {
     private String id;

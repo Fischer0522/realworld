@@ -1,5 +1,6 @@
 package com.fischer.api;
 
+import com.fischer.assistant.ResultType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -56,12 +57,13 @@ public class EmailApi {
                 simpleMailMessage.setText("请在5分钟内尽快填写验证码，完成注册\n"+"验证码为："+i);
                 javaMailSender.send(simpleMailMessage);
 
-        return ResponseEntity.ok(new HashMap<String,Object>(){
+        /*return ResponseEntity.ok(new HashMap<String,Object>(){
             {
                 put("code",200);
                 put("message","验证码已经成功发送");
             }
-        });
+        });*/
+        return ResponseEntity.ok(new ResultType(200,null,"验证码已经成功发送"));
     }
 
 

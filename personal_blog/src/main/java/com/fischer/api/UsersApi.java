@@ -2,6 +2,7 @@ package com.fischer.api;
 
 import com.fischer.api.exception.BizException;
 
+import com.fischer.assistant.ResultType;
 import com.fischer.data.LoginParam;
 import com.fischer.data.RegisterParam;
 import com.fischer.data.UserData;
@@ -71,7 +72,8 @@ public class UsersApi {
 
         Map<String,Object> map=new HashMap<>();
         map.put("user",userData);
-        return ResponseEntity.status(201).body(map);
+        /*return ResponseEntity.status(201).body(map);*/
+        return ResponseEntity.status(201).body(new ResultType(201,map,"ok"));
 
     }
 
@@ -92,6 +94,8 @@ public class UsersApi {
 
             return ResponseEntity
                     .ok(userResponse(new UserWithToken(userData,jwtService.toToken(user))));
+
+
         }
         else{
             throw new BizException(HttpStatus.UNAUTHORIZED,"邮箱或者密码错误！");
@@ -106,17 +110,18 @@ public class UsersApi {
         if(Boolean.FALSE.equals(delete)){
             throw new BizException(HttpStatus.UNAUTHORIZED,"用户已经注销，请勿重新操作");
         }
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(204).body(new ResultType(204,null,"ok"));
     }
 
 
 
-    private Map<String,Object> userResponse(UserWithToken userWithToken){
-        return new HashMap<String,Object>(){
+    private ResultType userResponse(UserWithToken userWithToken){
+        /*return new HashMap<String,Object>(){
             {
                 put("user",userWithToken);
             }
-        };
+        };*/
+        return new ResultType(200,userWithToken,"ok");
     }
 
 

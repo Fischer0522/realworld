@@ -1,5 +1,6 @@
 package com.fischer.api;
 
+import com.fischer.assistant.ResultType;
 import com.fischer.service.TagsQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +23,13 @@ public class TagsApi {
     @GetMapping
     public ResponseEntity getTags(){
         List<String> strings = tagsQueryService.allTags();
-        return ResponseEntity.ok(
+        /*return ResponseEntity.ok(
                 new HashMap<String,Object>(){
                     {
                         put("tags",strings);
                     }
                 }
-        );
+        );*/
+        return ResponseEntity.ok(new ResultType(200,strings,"ok"));
     }
 }

@@ -6,12 +6,14 @@ import org.springframework.http.HttpStatus;
 @Getter
 public class BizException extends RuntimeException{
     private HttpStatus status;
-    private String message;
+    private String msg;
+    private Object data;
 
-    public BizException(HttpStatus status,String message){
-        super(message);
+    public BizException(HttpStatus status,String msg){
+        super(msg);
         this.status=status;
-        this.message=message;
+        this.msg=msg;
+        this.data=null;
 
     }
     public BizException(HttpStatus status){

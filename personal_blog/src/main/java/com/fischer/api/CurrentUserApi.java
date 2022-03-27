@@ -1,6 +1,7 @@
 package com.fischer.api;
 
 import com.fischer.api.exception.BizException;
+import com.fischer.assistant.ResultType;
 import com.fischer.data.UpdateUserCommand;
 import com.fischer.data.UpdateUserParam;
 import com.fischer.data.UserData;
@@ -63,11 +64,12 @@ public class CurrentUserApi {
         return ResponseEntity.ok(userResponse(new UserWithToken(userData,token)));
 
     }
-    private Map<String,Object> userResponse(UserWithToken userWithToken){
-        return new HashMap<String,Object>(){
+    private ResultType userResponse(UserWithToken userWithToken){
+        /*return new HashMap<String,Object>(){
             {
                 put("user",userWithToken);
             }
-        };
+        };*/
+        return new ResultType(HttpStatus.OK.value(), userWithToken,"ok");
     }
 }

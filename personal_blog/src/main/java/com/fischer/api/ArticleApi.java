@@ -2,6 +2,7 @@ package com.fischer.api;
 
 import com.fischer.api.exception.BizException;
 import com.fischer.assistant.AuthorizationService;
+import com.fischer.assistant.ResultType;
 import com.fischer.data.ArticleData;
 import com.fischer.data.UpdateArticleCommand;
 import com.fischer.data.UpdateArticleParam;
@@ -72,7 +73,10 @@ public class ArticleApi {
                         UpdateArticleCommand updateArticleCommand=new UpdateArticleCommand(article,updateArticleParam);
                         Article updateArticle = articleCommandService.updateArticle(updateArticleCommand);
                         return ResponseEntity.ok(
-                                articleResponse(articleQueryService.findBySlug(updateArticle.getSlug(),user).get()));
+                                new ResultType(HttpStatus.OK.value(),
+                                        articleQueryService.findBySlug(updateArticle.getSlug(),user).get(),
+                                        "ok")
+                                );
 
                         }
                 })
@@ -92,17 +96,13 @@ public class ArticleApi {
                     }
                     else{
                         articleRepository.remove(article);
-                        return ResponseEntity.noContent().build();
+                        return ResponseEntity.ok(new ResultType(HttpStatus.NO_CONTENT.value(), null,"已删除"));
                     }
                 })
                 .orElseThrow(()->new BizException(HttpStatus.NOT_FOUND,"资源请求失败，要删除的文章已经不存在"));
     }
-    private Map<String,Object> articleResponse(ArticleData articleData){
-        return new HashMap<String,Object>(){
-            {
-                put("article",articleData);
-            }
-        };
+    private ResultType articleResponse(ArticleData articleData){
+        return new ResultType(200,articleData,"ok");
     }
 
 

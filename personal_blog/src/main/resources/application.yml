@@ -9,14 +9,14 @@ spring:
       static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${web.upload-path}
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/blog?serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/blog?serverTimezone=UTC #修改ip以及端口 和密码
     username: root
     password: 1234
     type: com.alibaba.druid.pool.DruidDataSource
   jackson:
     deserialization.UNWRAP_ROOT_VALUE: true
   redis:
-    host: localhost
+    host: localhost  #修改端口
     port: 6379
     lettuce:
       pool:
@@ -24,6 +24,7 @@ spring:
         max-idle: 8
         min-idle: 0
         max-wait: 1000ms
+    password: 123
 
 
 mybatis-plus:
@@ -36,7 +37,7 @@ jwt:
   secret: nRvyYC4soFxBdZ-F-5Nnzz5USXstR1YylsTd-mA0aKtI9HUlriGrtkf-TiuDapkLiUCogO3JOK7kwZisrHp6wA
   sessionTime: 86400
 
-
+  #修改文件上传和读取地址
 web:
   upload-path: D:\learn_software\program_file\IDEAProgject\personal_blog\src\main\resources\static\img\
   realpath: D:/learn_software/program_file/IDEAProgject/personal_blog/src/main/resources/static/
@@ -48,7 +49,7 @@ mail:
   # 发送者邮箱
   username: fischer0522@163.com
   # 配置密码，注意不是真正的密码，而是刚刚申请到的授权码
-  password: 
+  password: FLFCRBRSZUBWSLYB
   # 端口号163默认为 465 994
   port: 465
   # 默认的邮件编码为UTF-8

@@ -1,5 +1,6 @@
 package com.fischer.api.exception;
 
+import com.fischer.assistant.ResultType;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,56 +25,54 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BizException.class)
     public ResponseEntity bizExceptionHandler(HttpServletRequest req,BizException e){
-        Map<String,Object> map=new HashMap<>();
-        map.put("message",e.getMessage());
-        map.put("code",e.getStatus().value());
+        ResultType resultType=new ResultType(e.getStatus().value(),null,e.getMessage());
         logger.error("发生业务异常，具体情况为："+e.getMessage());
-        return new ResponseEntity(map,e.getStatus());
+        e.printStackTrace();
+        return new ResponseEntity(resultType,e.getStatus());
     }
 
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity nullPointerHandler(HttpServletRequest req,NullPointerException e){
-        Map<String,Object> map=new HashMap<>();
-        map.put("message","服务器出现异常，可能数据已不存在，请联系管理员");
-        map.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        logger.error("发生空指针异常"+e.getMessage());
-        return new ResponseEntity(map, HttpStatus.INTERNAL_SERVER_ERROR);
+        ResultType resultType=new ResultType( HttpStatus.INTERNAL_SERVER_ERROR.value(),null,"服务器出现异常，可能数据已不存在，请联系管理员");
+        logger.error(e.getMessage());
+        e.printStackTrace();
+        return new ResponseEntity(resultType, HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity NotVaildExceptionHandler(HttpServletRequest req,MethodArgumentNotValidException e){
-        Map<String,Object> map=new HashMap<>();
+
         List<ObjectError> allErrors = e.getAllErrors();
+        String temp="";
         for(ObjectError objectError:allErrors){
-            map.put("message",objectError.getDefaultMessage());
+
+            temp=objectError.getDefaultMessage();
             logger.error("表单数据校验未通过，原因为:"+objectError.getDefaultMessage());
         }
-        map.put("code",HttpStatus.BAD_REQUEST.value());
-        return new ResponseEntity(map,HttpStatus.BAD_REQUEST);
+        ResultType resultType=new ResultType(HttpStatus.BAD_REQUEST.value(), null,temp);
+        e.printStackTrace();
+        return new ResponseEntity(resultType,HttpStatus.BAD_REQUEST);
 
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity sizeLimit(HttpServletRequest req,MaxUploadSizeExceededException e){
-        Map<String,Object> map=new HashMap<>();
-        map.put("message","上传的文件超出限制，请上传3m以下的文件");
-        map.put("code",HttpStatus.BAD_REQUEST.value());
         logger.error(e.getMessage());
-        return new ResponseEntity(map,HttpStatus.BAD_REQUEST);
+        ResultType resultType=new ResultType(HttpStatus.BAD_REQUEST.value(), null,"上传的文件超出限制，请上传3m以下的文件");
+        e.printStackTrace();
+        return new ResponseEntity(resultType,HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity unknowErrorException(HttpServletRequest req,Exception e){
-        Map<String,Object> map=new HashMap<>();
-        map.put("message","出现未知异常!请联系管理员");
-        map.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
         logger.error("出现未知异常，详细信息:"+e.getMessage());
-        return new ResponseEntity(map,HttpStatus.INTERNAL_SERVER_ERROR);
+        ResultType resultType=new ResultType(HttpStatus.INTERNAL_SERVER_ERROR.value(), null,"出现未知异常!请联系管理员");
+        e.printStackTrace();
+        return new ResponseEntity(resultType,HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity updateViolation(HttpServletRequest req,ConstraintViolationException e){
-        Map<String,Object> map=new HashMap<>();
         String temp=e.getMessage();
         String sub=null;
         for(int i=0;i<temp.length()-1;i++){
@@ -83,10 +82,10 @@ public class GlobalExceptionHandler {
                 sub=temp.substring(i+2);
             }
         }
-        map.put("message",sub);
-        map.put("code",HttpStatus.BAD_REQUEST.value());
+        ResultType resultType=new ResultType(HttpStatus.BAD_REQUEST.value(), null,sub);
         logger.error("出现未知异常，详细信息:"+sub);
-        return new ResponseEntity(map,HttpStatus.BAD_REQUEST);
+        e.printStackTrace();
+        return new ResponseEntity(resultType,HttpStatus.BAD_REQUEST);
 
     }
 

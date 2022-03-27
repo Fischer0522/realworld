@@ -3,6 +3,7 @@ package com.fischer.service.article.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fischer.api.exception.BizException;
 import com.fischer.assistant.MyPage;
 import com.fischer.dao.ArticleDao;
 import com.fischer.data.ArticleData;
@@ -17,6 +18,7 @@ import com.fischer.service.article.ArticleQueryService;
 import org.apache.logging.log4j.util.Strings;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,7 +48,7 @@ public class ArticleQueryServiceImpl extends ServiceImpl<ArticleDao, Article> im
     public Optional<ArticleData> findById(String id, User user) {
         ArticleData articleData = articleReadService.findById(id);
         if(articleData==null){
-            return Optional.empty();
+            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR,"文章创建失败，请联系管理员");
         }
         else {
             if(user!=null){
@@ -60,7 +62,7 @@ public class ArticleQueryServiceImpl extends ServiceImpl<ArticleDao, Article> im
     public Optional<ArticleData> findBySlug(String slug, User user) {
         ArticleData articleData = articleReadService.findBySlug(slug);
         if(articleData==null){
-            return Optional.empty();
+            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR,"该文章出现了未知错误，请联系管理员");
         }
         else{
             if(user!=null){

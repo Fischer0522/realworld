@@ -1,6 +1,7 @@
 package com.fischer.api;
 
 import com.fischer.assistant.MyPage;
+import com.fischer.assistant.ResultType;
 import com.fischer.assistant.Util;
 import com.fischer.data.ArticleDataList;
 import com.fischer.data.NewArticleParam;
@@ -10,6 +11,7 @@ import com.fischer.pojo.User;
 import com.fischer.service.article.ArticleCommandService;
 import com.fischer.service.article.ArticleQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -38,12 +40,15 @@ public class ArticlesApi {
             @RequestHeader(value = "Authorization")String token){
         User user = jwtService.toUser(token).get();
         Article article = articleCommandService.createArticle(newArticleParam, user);
-        return ResponseEntity.ok(
+        /*return ResponseEntity.ok(
                 new HashMap<String,Object>() {
                     {
                     put("article",articleQueryService.findById(article.getId(),user).get());
                 }
-                });
+                });*/
+        return ResponseEntity.ok(new ResultType(HttpStatus.CREATED.value(),
+                articleQueryService.findById(article.getId(),user).get(),
+                "创建文章成功"));
     }
     @GetMapping(path = "exact")
     public ResponseEntity getArticles(
@@ -66,7 +71,8 @@ public class ArticlesApi {
                 favoritedBy,
                 new MyPage(offset, limit),
                 user);
-        return ResponseEntity.ok(recentArticles);
+        /*return ResponseEntity.ok(recentArticles);*/
+        return ResponseEntity.ok(new ResultType(HttpStatus.OK.value(), recentArticles,"查询成功"));
     }
 
 
@@ -91,7 +97,7 @@ public class ArticlesApi {
                 new MyPage(offset, limit),
                 user
         );
-        return ResponseEntity.ok(articleDataList);
+        return ResponseEntity.ok(new ResultType(HttpStatus.OK.value(), articleDataList,"ok"));
 
     }
 

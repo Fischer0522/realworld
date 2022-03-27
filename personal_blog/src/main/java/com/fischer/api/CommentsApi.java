@@ -2,6 +2,7 @@ package com.fischer.api;
 
 import com.fischer.api.exception.BizException;
 import com.fischer.assistant.AuthorizationService;
+import com.fischer.assistant.ResultType;
 import com.fischer.assistant.Util;
 import com.fischer.data.CommentData;
 import com.fischer.data.NewCommentParam;
@@ -70,12 +71,14 @@ public class CommentsApi {
         }
         Article article = articleRepository.findBySlug(slug).orElseThrow(()->new BizException(HttpStatus.NOT_FOUND,"该文章已经不存在"));
         List<CommentData> commentDataList = commentQueryService.findByArticleId(article.getId(), user);
-        return ResponseEntity.ok(
+        /*return ResponseEntity.ok(
                 new HashMap<String,Object>(){
             {
                 put("comments",commentDataList);
             }
-        });
+        });*/
+        return ResponseEntity
+                .ok(new ResultType(HttpStatus.OK.value(), commentDataList,"查询成功"));
     }
     @DeleteMapping(path = "{id}")
     public ResponseEntity deleteComment(
@@ -88,7 +91,7 @@ public class CommentsApi {
                 .map(comment -> {
                     if(authorizationService.canWriteComment(user,article,comment)){
                         commentRepository.remove(comment);
-                        return ResponseEntity.noContent().build();
+                        return ResponseEntity.ok(new ResultType(204,null,"删除成功"));
                     }
                         throw new BizException(HttpStatus.FORBIDDEN,"未经授权的操作！");
 
@@ -96,12 +99,13 @@ public class CommentsApi {
     }
 
 
-    private Map<String,Object> commentResponse(CommentData commentData){
+    private ResultType commentResponse(CommentData commentData){
 
-        return new HashMap<String,Object>(){
+        /*return new HashMap<String,Object>(){
             {
                 put("comment",commentData);
             }
-        };
+        };*/
+        return new ResultType(HttpStatus.OK.value(), commentData,"ok");
     }
 }

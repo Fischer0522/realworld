@@ -1,6 +1,7 @@
 package com.fischer.api;
 
 import com.fischer.api.exception.BizException;
+import com.fischer.assistant.ResultType;
 import com.fischer.dao.UserDao;
 import com.fischer.data.ArticleData;
 import com.fischer.jwt.JwtService;
@@ -58,20 +59,17 @@ public class ArticleFavoriteApi {
         User user = jwtService.toUser(token).get();
         Article article = articleRepository.findBySlug(slug).orElseThrow(()-> new BizException(HttpStatus.NOT_FOUND,"资源请求失败，该文章可能已经被删除"));
         Optional<ArticleFavorite> articleFavorite = articleFavoriteRepository.find(article.getId(), user.getId());
-        if (articleFavorite.isPresent()) {
-            articleFavoriteRepository.remove(articleFavorite.get());
-        }
+        articleFavorite.ifPresent(favorite -> articleFavoriteRepository.remove(favorite));
         Optional<ArticleData> articleData = articleQueryService.findBySlug(slug, user);
-        return responseArticleData(articleData.get());
+        return ResponseEntity.status(204).body(new ResultType(204,articleData,"ok"));
     }
-    private ResponseEntity<HashMap<String,Object>> responseArticleData(
+
+
+    private ResponseEntity<ResultType> responseArticleData(
             final ArticleData articleData){
-        return ResponseEntity.ok(new HashMap<String,Object>(){
-            {
-                put("article",articleData);
-            }
-        });
+        return ResponseEntity.ok(new ResultType(HttpStatus.OK.value(),articleData,"favorite成功"));
     }
+
 
 }
 

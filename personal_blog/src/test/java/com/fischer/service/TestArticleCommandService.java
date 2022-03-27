@@ -23,7 +23,7 @@ public class TestArticleCommandService {
     private UserRepository userRepository;
     @Autowired
     ArticleRepository articleRepository;
-    @Test
+  /*  @Test
     public void testCreateNew(){
         List<String> tag=new LinkedList<>();
         tag.add("noob");
@@ -57,5 +57,5 @@ public class TestArticleCommandService {
 
 
 
-    }
+    }*/
 }

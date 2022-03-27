@@ -1,6 +1,7 @@
 package com.fischer.api;
 
 import com.fischer.api.exception.BizException;
+import com.fischer.assistant.ResultType;
 import com.fischer.dao.AdminDao;
 import com.fischer.data.ProfileData;
 import com.fischer.jwt.JwtService;
@@ -56,7 +57,8 @@ public class ProfileApi {
         }
         adminDao.insert(new Admin(user.getId(),user.getUsername()));
 
-        return ResponseEntity.ok(new Admin(user.getId(),user.getUsername()));
+        /*return ResponseEntity.ok(new Admin(user.getId(),user.getUsername()));*/
+        return ResponseEntity.ok(new ResultType(HttpStatus.CREATED.value(), new Admin(user.getId(),user.getUsername()),"ok"));
 
     }
     @DeleteMapping("admin")
@@ -72,15 +74,16 @@ public class ProfileApi {
             throw new BizException(HttpStatus.NOT_FOUND,"当前用户不是管理员");
         }
         adminDao.deleteById(user.getId());
-        return  ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.ok(new ResultType(HttpStatus.NO_CONTENT.value(), new Admin(user.getId(),user.getUsername()),"ok"));
 
     }
 
     /*后续补充关注和取关的功能*/
     private ResponseEntity profileResponse(ProfileData profile) {
-        return ResponseEntity.ok(new HashMap<String, Object>() {{
+        /*return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("profile", profile);
-        }});
+        }});*/
+        return ResponseEntity.ok(new ResultType(HttpStatus.OK.value(), profile,"ok"));
     }
 
 

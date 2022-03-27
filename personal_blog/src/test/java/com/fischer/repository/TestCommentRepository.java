@@ -27,14 +27,7 @@ public class TestCommentRepository {
         );
         commentRepository.save(comment);
     }
-    @Test
-    public void testFind(){
-        String articleId="e30e99ae-5bdf-4a3f-90fa-49cd18692eac";
-        String id="33a3c2b7-0c1e-45ce-98b6-e4aa855f85ce";
-        Comment comment = commentRepository.find(articleId, id).orElseThrow(()->new BizException(HttpStatus.NOT_FOUND,"擦汗寻不到该破镜论"));
-        System.out.println(comment);
 
-    }
     @Test
     public void testRemove(){
         String articleId="e30e99ae-5bdf-4a3f-90fa-49cd18692eac";
