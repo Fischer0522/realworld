@@ -110,7 +110,7 @@ public class UsersApi {
         if(Boolean.FALSE.equals(delete)){
             throw new BizException(HttpStatus.UNAUTHORIZED,"用户已经注销，请勿重新操作");
         }
-        return ResponseEntity.status(204).body(new ResultType(204,null,"ok"));
+        return ResponseEntity.ok(new ResultType(204,null,"ok"));
     }
 
 

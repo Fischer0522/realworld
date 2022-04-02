@@ -30,6 +30,9 @@ public class TagsApi {
                     }
                 }
         );*/
+        if(strings.isEmpty()){
+            return ResponseEntity.ok(new ResultType(200,strings,"查询结果为空"));
+        }
         return ResponseEntity.ok(new ResultType(200,strings,"ok"));
     }
 }

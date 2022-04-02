@@ -61,7 +61,7 @@ public class ArticleFavoriteApi {
         Optional<ArticleFavorite> articleFavorite = articleFavoriteRepository.find(article.getId(), user.getId());
         articleFavorite.ifPresent(favorite -> articleFavoriteRepository.remove(favorite));
         Optional<ArticleData> articleData = articleQueryService.findBySlug(slug, user);
-        return ResponseEntity.status(204).body(new ResultType(204,articleData,"ok"));
+        return ResponseEntity.ok(new ResultType(204,articleData,"ok"));
     }
 
 

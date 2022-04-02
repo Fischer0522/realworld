@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 
 @Service
-@Transactional
+
 public class ArticleQueryServiceImpl extends ServiceImpl<ArticleDao, Article> implements ArticleQueryService {
 
     private ArticleReadService articleReadService;
@@ -48,7 +48,7 @@ public class ArticleQueryServiceImpl extends ServiceImpl<ArticleDao, Article> im
     public Optional<ArticleData> findById(String id, User user) {
         ArticleData articleData = articleReadService.findById(id);
         if(articleData==null){
-            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR,"文章创建失败，请联系管理员");
+            return Optional.empty();
         }
         else {
             if(user!=null){
@@ -62,7 +62,7 @@ public class ArticleQueryServiceImpl extends ServiceImpl<ArticleDao, Article> im
     public Optional<ArticleData> findBySlug(String slug, User user) {
         ArticleData articleData = articleReadService.findBySlug(slug);
         if(articleData==null){
-            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR,"该文章出现了未知错误，请联系管理员");
+            return Optional.empty();
         }
         else{
             if(user!=null){

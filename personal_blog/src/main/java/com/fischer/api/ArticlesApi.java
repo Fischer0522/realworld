@@ -46,7 +46,7 @@ public class ArticlesApi {
                     put("article",articleQueryService.findById(article.getId(),user).get());
                 }
                 });*/
-        return ResponseEntity.ok(new ResultType(HttpStatus.CREATED.value(),
+        return ResponseEntity.status(201).body(new ResultType(HttpStatus.CREATED.value(),
                 articleQueryService.findById(article.getId(),user).get(),
                 "创建文章成功"));
     }
@@ -72,6 +72,9 @@ public class ArticlesApi {
                 new MyPage(offset, limit),
                 user);
         /*return ResponseEntity.ok(recentArticles);*/
+        if(recentArticles.getCount()==0){
+            return ResponseEntity.ok(new ResultType(HttpStatus.OK.value(), recentArticles,"查询结果为空"));
+        }
         return ResponseEntity.ok(new ResultType(HttpStatus.OK.value(), recentArticles,"查询成功"));
     }
 
@@ -97,10 +100,12 @@ public class ArticlesApi {
                 new MyPage(offset, limit),
                 user
         );
+        if(articleDataList.getCount()==0){
+            return ResponseEntity.ok(new ResultType(HttpStatus.OK.value(), articleDataList,"查询结果为空"));
+        }
         return ResponseEntity.ok(new ResultType(HttpStatus.OK.value(), articleDataList,"ok"));
 
     }
-
 
 
 }

@@ -58,7 +58,7 @@ public class ProfileApi {
         adminDao.insert(new Admin(user.getId(),user.getUsername()));
 
         /*return ResponseEntity.ok(new Admin(user.getId(),user.getUsername()));*/
-        return ResponseEntity.ok(new ResultType(HttpStatus.CREATED.value(), new Admin(user.getId(),user.getUsername()),"ok"));
+        return ResponseEntity.status(201).body(new ResultType(HttpStatus.CREATED.value(), new Admin(user.getId(),user.getUsername()),"ok"));
 
     }
     @DeleteMapping("admin")

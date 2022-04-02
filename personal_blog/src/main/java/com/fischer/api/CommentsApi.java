@@ -77,6 +77,10 @@ public class CommentsApi {
                 put("comments",commentDataList);
             }
         });*/
+        if(commentDataList.isEmpty()){
+            return ResponseEntity
+                    .ok(new ResultType(HttpStatus.OK.value(), commentDataList,"查询结果为空"));
+        }
         return ResponseEntity
                 .ok(new ResultType(HttpStatus.OK.value(), commentDataList,"查询成功"));
     }
@@ -106,6 +110,6 @@ public class CommentsApi {
                 put("comment",commentData);
             }
         };*/
-        return new ResultType(HttpStatus.OK.value(), commentData,"ok");
+        return new ResultType(HttpStatus.CREATED.value(), commentData,"ok");
     }
 }

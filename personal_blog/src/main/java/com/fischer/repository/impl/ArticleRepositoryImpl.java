@@ -43,7 +43,6 @@ public class ArticleRepositoryImpl implements ArticleRepository {
         this.imageRepository=imageRepository;
     }
     @Override
-    @Transactional
     public void save(Article article) {
         if(!findById(article.getId()).isPresent())
         {
