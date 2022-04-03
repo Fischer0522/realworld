@@ -21,7 +21,7 @@ public class UpdateUserValidator implements ConstraintValidator<UpdateUserConstr
         String inputUsername=value.getParam().getUsername();
         String inputPassword=value.getParam().getPassword();
         String inputBio=value.getParam().getBio();
-        if(!inputEmail.matches("^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$" )){
+        /*if(!inputEmail.matches("^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$" )){
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate("邮箱格式不正确")
                     .addPropertyNode("email")
@@ -48,7 +48,7 @@ public class UpdateUserValidator implements ConstraintValidator<UpdateUserConstr
                     .addPropertyNode("bio")
                     .addConstraintViolation();
             return false;
-        }
+        }*/
         final User targetUser=value.getTargetUser();
         boolean isEmailValid =
                 userRepository.findByEmail(inputEmail)
