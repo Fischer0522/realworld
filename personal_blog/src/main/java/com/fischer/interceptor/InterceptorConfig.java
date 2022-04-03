@@ -20,7 +20,14 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(myInterceptor())
-                 .addPathPatterns("/**")
+                .addPathPatterns("/articles/{slug}/**")
+                .addPathPatterns("/articles/{slug}/favorite/**")
+                .addPathPatterns("/articles/**")
+                .addPathPatterns("/articles/{slug}/comments/**")
+                .addPathPatterns("/user/**")
+                .addPathPatterns("/file/**")
+                .addPathPatterns("profiles/{username}/**")
+                .addPathPatterns("/users/**")
                 .excludePathPatterns("/users/login")
                 .excludePathPatterns("/users/register")
                 .excludePathPatterns("/articles/exact")

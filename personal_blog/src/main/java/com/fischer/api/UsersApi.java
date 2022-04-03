@@ -30,6 +30,7 @@ import java.util.Optional;
 
 @Validated
 @RestController
+@RequestMapping("users")
 public class UsersApi {
     private UserRepository userRepository;
     private UserQueryService userQueryService;
@@ -55,7 +56,7 @@ public class UsersApi {
 
     }
 
-    @PostMapping(path = "/users/register")
+    @PostMapping(path = "register")
     public ResponseEntity createUser(@Valid @RequestBody RegisterParam registerParam){
 
         String verifyCode = registerParam.getVerifyCode();
@@ -77,7 +78,7 @@ public class UsersApi {
 
     }
 
-    @PostMapping(path = "/users/login")
+    @PostMapping(path = "login")
     public ResponseEntity userLogin(@Valid @RequestBody LoginParam loginParam){
 
         Optional<User> byEmail = userRepository.findByEmail(loginParam.getEmail());
@@ -102,7 +103,7 @@ public class UsersApi {
         }
 
     }
-    @DeleteMapping("/users/logout")
+    @DeleteMapping("logout")
     public ResponseEntity userLogout(@RequestHeader(value = "Authorization")String token){
         String id = jwtService.getSubFromToken(token).get();
         String logoutId="loginUser:"+id;

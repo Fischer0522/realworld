@@ -26,10 +26,11 @@ public class RegisterParam {
 
     @NotBlank(message = "请给自己起个名字")
     @DuplicatedUsernameConstraint
+    @Pattern(regexp = "[\\u4e00-\\u9fa5_a-zA-Z0-9_-]{1,20}")
     private String username;
 
     @NotBlank(message = "密码不能为空")
-    @Pattern(regexp = "[a-zA-Z0-9]{3,20}",message = "密码格式应为：3到20位的大小写字母以及数字的组合")
+    @Pattern(regexp = "[a-zA-Z0-9-_]{3,20}",message = "密码只能使用3-20位的字母或数字和-_")
     private String password;
 
     @NotBlank(message = "验证码不能为空")

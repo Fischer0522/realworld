@@ -9,6 +9,7 @@ import com.fischer.pojo.Admin;
 import com.fischer.pojo.User;
 import com.fischer.repository.UserRepository;
 import com.fischer.service.ProfileQueryService;
+import com.fischer.service.admin.AdminService;
 import com.fischer.service.user.UserQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.config.RepositoryNameSpaceHandler;
@@ -27,15 +28,18 @@ public class ProfileApi {
     private ProfileQueryService profileQueryService;
     private UserRepository userRepository;
     private JwtService jwtService;
+    private AdminService adminService;
     @Autowired
     public ProfileApi(ProfileQueryService profileQueryService,
                         AdminDao adminDao,
                       UserRepository userRepository,
-                      JwtService jwtService){
+                      JwtService jwtService,
+                      AdminService adminService){
         this.profileQueryService=profileQueryService;
         this.adminDao=adminDao;
         this.userRepository=userRepository;
         this.jwtService=jwtService;
+        this.adminService=adminService;
     }
     @GetMapping
     public ResponseEntity getProfile(@PathVariable("username") String username){
@@ -47,6 +51,9 @@ public class ProfileApi {
     @PostMapping("admin")
     public ResponseEntity addAdimin(@PathVariable("username") String username,
                                     @RequestHeader(value ="Authorization") String token){
+        if(adminService.findByusername(username)!=null){
+            throw new BizException(HttpStatus.CONFLICT,"该用户已经是管理员");
+        }
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new BizException(HttpStatus.NOT_FOUND, "该用户不存在"));
         User admin = jwtService.toUser(token)
