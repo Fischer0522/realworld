@@ -6,12 +6,12 @@ import java.util.List;
 
 public interface ImageRepository {
 
-    List<Image> findByArticleSlug(String articleSlug);
+    List<Image> findByArticleId(String articleId);
 
     Image findById(String id);
 
     boolean addImage(List<Image> images);
 
 
-    boolean removeBySlug(String slug);
+    boolean removeByArticleId(String articleId);
 }

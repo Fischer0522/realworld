@@ -48,8 +48,8 @@ public class Article {
             List<String> imagesName,
             String userId
             )
-    {
-        this.id= UUID.randomUUID().toString();
+    {   String id=UUID.randomUUID().toString();
+        this.id= id;
         this.slug=toSlug(title);
         this.title=title;
         this.description=description;
@@ -59,7 +59,7 @@ public class Article {
         }
         if(imagesName!= null){
             for(String name:imagesName){
-                this.images.add(new Image(toSlug(title),name));
+                this.images.add(new Image(id,name));
             }
         }
         this.createdAt= TimeCursor.toTime(DateTime.now());

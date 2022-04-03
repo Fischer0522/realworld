@@ -20,9 +20,9 @@ public class ImageRepositoryImpl implements ImageRepository {
     private String rootpath;
 
     @Override
-    public List<Image> findByArticleSlug(String articleSlug) {
+    public List<Image> findByArticleId(String articleId) {
         LambdaQueryWrapper<Image> lqw=new LambdaQueryWrapper<>();
-        lqw.eq(Strings.isNotEmpty(articleSlug),Image::getArticleSlug,articleSlug);
+        lqw.eq(Strings.isNotEmpty(articleId),Image::getArticleId,articleId);
         return imageDao.selectList(lqw);
     }
 
@@ -68,9 +68,9 @@ public class ImageRepositoryImpl implements ImageRepository {
 
 
     @Override
-    public boolean removeBySlug(String slug) {
+    public boolean removeByArticleId(String articleId) {
         LambdaQueryWrapper<Image> lqw=new LambdaQueryWrapper<>();
-        lqw.eq(Strings.isNotEmpty(slug),Image::getArticleSlug,slug);
+        lqw.eq(Strings.isNotEmpty(articleId),Image::getArticleId,articleId);
         for (Image image : imageDao.selectList(lqw)) {
             String imagePos = image.getImagePos();
             removeImage(imagePos);
