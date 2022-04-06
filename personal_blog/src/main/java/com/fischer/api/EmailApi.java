@@ -54,7 +54,6 @@ public class EmailApi {
         redisTemplate.opsForValue().set(userEmail,i+"");
         Duration duration=Duration.ofMinutes(5);
         redisTemplate.expire(userEmail,duration);
-
         //将验证码发送给用户
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
                 javaMailSender.setUsername(username);

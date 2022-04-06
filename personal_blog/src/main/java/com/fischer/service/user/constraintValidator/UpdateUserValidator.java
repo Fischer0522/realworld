@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.util.Optional;
 
 public class UpdateUserValidator implements ConstraintValidator<UpdateUserConstraint, UpdateUserCommand> {
     @Autowired
@@ -49,11 +50,13 @@ public class UpdateUserValidator implements ConstraintValidator<UpdateUserConstr
                     .addConstraintViolation();
             return false;
         }*/
+        /*新的email如果在数据库中查询不到则直接orelse为true，查寻的到则按照map中判断得到的true/false判断最终结果*/
         final User targetUser=value.getTargetUser();
         boolean isEmailValid =
                 userRepository.findByEmail(inputEmail)
                         .map(user -> user.equals(targetUser))
                         .orElse(true);
+
 
         boolean isUsernameValid =
                 userRepository.findByUsername(inputUsername)

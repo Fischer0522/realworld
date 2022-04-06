@@ -34,7 +34,7 @@ public class UpdateUserParam {
     private String password="";
 
     @Builder.Default
-    @Pattern(regexp = "[\\u4e00-\\u9fa5_a-zA-Z0-9_-]{1,20}",message ="用户名只支持20位以内的中英文和数字以及下划线" )
+    @Pattern(regexp = "[\\u4e00-\\u9fa5_a-zA-Z0-9-]{1,20}",message ="用户名只支持20位以内的中英文和数字以及下划线" )
     private String username="";
 
     @Builder.Default

@@ -46,7 +46,7 @@ public class ArticlesApi {
                     put("article",articleQueryService.findById(article.getId(),user).get());
                 }
                 });*/
-        return ResponseEntity.status(201).body(new ResultType(HttpStatus.CREATED.value(),
+        return ResponseEntity.status(200).body(new ResultType(HttpStatus.CREATED.value(),
                 articleQueryService.findById(article.getId(),user).get(),
                 "创建文章成功"));
     }

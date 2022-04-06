@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
         ResultType resultType=new ResultType(e.getStatus().value(),null,e.getMessage());
         logger.error("发生业务异常，具体情况为："+e.getMessage());
         e.printStackTrace();
-        return new ResponseEntity(resultType,e.getStatus());
+        return new ResponseEntity(resultType,HttpStatus.OK);
     }
 
     @ExceptionHandler(NullPointerException.class)
@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
         }
         ResultType resultType=new ResultType(HttpStatus.BAD_REQUEST.value(), null,temp);
         e.printStackTrace();
-        return new ResponseEntity(resultType,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(resultType,HttpStatus.OK);
 
     }
 
@@ -60,13 +60,13 @@ public class GlobalExceptionHandler {
         logger.error(e.getMessage());
         ResultType resultType=new ResultType(HttpStatus.BAD_REQUEST.value(), null,"上传的文件超出限制，请上传3m以下的文件");
         e.printStackTrace();
-        return new ResponseEntity(resultType,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(resultType,HttpStatus.OK);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity unknowErrorException(HttpServletRequest req,Exception e){
         logger.error("出现未知异常，详细信息:"+e.getMessage());
-        ResultType resultType=new ResultType(HttpStatus.INTERNAL_SERVER_ERROR.value(), null,"出现未知异常!请联系管理员");
+        ResultType resultType=new ResultType(HttpStatus.INTERNAL_SERVER_ERROR.value(), null,"出现未知异常!请联系管理员,详情:"+e.getMessage());
         e.printStackTrace();
         return new ResponseEntity(resultType,HttpStatus.INTERNAL_SERVER_ERROR);
 
@@ -85,7 +85,7 @@ public class GlobalExceptionHandler {
         ResultType resultType=new ResultType(HttpStatus.BAD_REQUEST.value(), null,sub);
         logger.error("出现未知异常，详细信息:"+sub);
         e.printStackTrace();
-        return new ResponseEntity(resultType,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(resultType,HttpStatus.OK);
 
     }
 

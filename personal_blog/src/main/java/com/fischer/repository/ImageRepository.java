@@ -14,4 +14,6 @@ public interface ImageRepository {
 
 
     boolean removeByArticleId(String articleId);
+
+    boolean removeByUserId(String userId);
 }

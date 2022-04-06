@@ -74,7 +74,7 @@ public class UsersApi {
         Map<String,Object> map=new HashMap<>();
         map.put("user",userData);
         /*return ResponseEntity.status(201).body(map);*/
-        return ResponseEntity.status(201).body(new ResultType(201,map,"ok"));
+        return ResponseEntity.status(200).body(new ResultType(201,map,"ok"));
 
     }
 

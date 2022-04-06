@@ -24,7 +24,7 @@ spring:
         max-idle: 8
         min-idle: 0
         max-wait: 1000ms
-    password: 123
+    password: yuxinyi0522
 
 
 mybatis-plus:

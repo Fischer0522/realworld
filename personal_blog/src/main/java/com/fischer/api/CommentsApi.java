@@ -56,7 +56,7 @@ public class CommentsApi {
         Comment comment=new Comment(newCommentParam.getBody(),user.getId() ,article.getId());
         commentRepository.save(comment);
         Optional<CommentData> commentData = commentQueryService.findById(comment.getId());
-        return ResponseEntity.status(201).body(commentResponse(commentData.get()));
+        return ResponseEntity.status(200).body(commentResponse(commentData.get()));
     }
     @GetMapping
     public ResponseEntity getComments(

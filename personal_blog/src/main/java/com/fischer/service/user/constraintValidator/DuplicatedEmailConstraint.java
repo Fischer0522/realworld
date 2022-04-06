@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 @Constraint(validatedBy = DuplicatedEmailValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DuplicatedEmailConstraint {
-    String message() default "duplicated email";
+    String message() default "该邮箱已被人注册";
 
     Class<?>[] groups() default {};
 

@@ -1,12 +1,14 @@
 package com.fischer.repository.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.fischer.api.exception.BizException;
 import com.fischer.dao.ImageDao;
 import com.fischer.pojo.Image;
 import com.fischer.repository.ImageRepository;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
@@ -46,7 +48,7 @@ public class ImageRepositoryImpl implements ImageRepository {
     }
 
 
-    private void removeImage(String path) {
+    private boolean removeImage(String path) {
         int pos=0;
         for(int i=0;i<path.length()-3;i++){
 
@@ -63,7 +65,11 @@ public class ImageRepositoryImpl implements ImageRepository {
         File dest=new File(realpath);
         if(dest.exists()){
             dest.delete();
+            return true;
+        }else {
+            return false;
         }
+
     }
 
 
@@ -80,5 +86,11 @@ public class ImageRepositoryImpl implements ImageRepository {
 
         return delete>0;
 
+    }
+
+    @Override
+    public boolean removeByUserId(String path) {
+        boolean b = removeImage(path);
+        return b;
     }
 }
