@@ -32,9 +32,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("users")
 public class UsersApi {
-    private UserRepository userRepository;
     private UserQueryService userQueryService;
-    private JwtService jwtService;
     private UserService userService;
     private StringRedisTemplate redisTemplate;
 
@@ -44,13 +42,10 @@ public class UsersApi {
             UserQueryService userQueryService,
             JwtService jwtService,
             UserService userService,
-            StringRedisTemplate redisTemplate,
-            @Value("${jwt.sessionTime}")int sessionTime
+            StringRedisTemplate redisTemplate
 
     ){
-        this.userRepository=userRepository;
         this.userQueryService=userQueryService;
-        this.jwtService=jwtService;
         this.userService=userService;
         this.redisTemplate=redisTemplate;
 
@@ -61,8 +56,7 @@ public class UsersApi {
 
         String verifyCode = registerParam.getVerifyCode();
         String s = redisTemplate.opsForValue().get(registerParam.getEmail());
-        System.out.println(verifyCode);
-        System.out.println(s);
+
         if(!verifyCode.equals(s)){
 
             throw new BizException(HttpStatus.BAD_REQUEST,"验证码错误,请重新获取");
@@ -81,7 +75,7 @@ public class UsersApi {
     @PostMapping(path = "login")
     public ResponseEntity userLogin(@Valid @RequestBody LoginParam loginParam){
 
-        Optional<User> byEmail = userRepository.findByEmail(loginParam.getEmail());
+       /* Optional<User> byEmail = userRepository.findByEmail(loginParam.getEmail());
         if(byEmail.isPresent()&&
                 loginParam.getPassword()
                         .equals(byEmail.get().getPassword())){
@@ -100,18 +94,23 @@ public class UsersApi {
         }
         else{
             throw new BizException(HttpStatus.UNAUTHORIZED,"邮箱或者密码错误！");
-        }
+        }*/
+        UserWithToken user = userService.loginUser(loginParam);
+        return ResponseEntity
+                .ok(new ResultType(200,user,"登录成功"));
 
     }
     @DeleteMapping("logout")
     public ResponseEntity userLogout(@RequestHeader(value = "Authorization")String token){
-        String id = jwtService.getSubFromToken(token).get();
+        /*String id = jwtService.getSubFromToken(token).get();
         String logoutId="loginUser:"+id;
         Boolean delete = redisTemplate.delete(logoutId);
         if(Boolean.FALSE.equals(delete)){
             throw new BizException(HttpStatus.UNAUTHORIZED,"用户已经注销，请勿重新操作");
         }
-        return ResponseEntity.ok(new ResultType(204,null,"ok"));
+        return ResponseEntity.ok(new ResultType(204,null,"ok"));*/
+        userService.logoutUser(token);
+        return ResponseEntity.ok(new ResultType(204,null,"注销成功"));
     }
 
 
