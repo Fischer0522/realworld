@@ -23,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         lqw.eq(Strings.isNotEmpty(username),User::getEmail,username);
         User user = userDao.selectOne(lqw);
         if(Objects.isNull(user)){
-            throw new UsernameNotFoundException("邮箱或者密码错误密码");
+            throw new UsernameNotFoundException("邮箱或者密码错误");
         }
         return new LoginUser(user);
 

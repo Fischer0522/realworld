@@ -25,6 +25,9 @@ spring:
         min-idle: 0
         max-wait: 1000ms
     password: yuxinyi0522
+  data:
+    mongodb:
+      uri: mongodb://fischer:yuxinyi0522@42.192.180.126:27017/blog
 
 
 mybatis-plus:

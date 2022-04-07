@@ -106,9 +106,7 @@ public class UserServiceImpl implements UserService {
                         loginParam.getPassword());
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
         if(Objects.isNull(authenticate)){
-            System.out.println(1);
-            throw new BizException(HttpStatus.UNAUTHORIZED,"用户名或者密码错误");
-
+            throw new BizException(HttpStatus.UNAUTHORIZED,"邮箱或者密码错误");
         }
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
         User user = loginUser.getUser();

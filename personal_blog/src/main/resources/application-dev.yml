@@ -24,6 +24,9 @@ spring:
         max-idle: 8
         min-idle: 0
         max-wait: 1000ms
+  data:
+    mongodb:
+      uri: mongodb://localhost/blog
 
 
 mybatis-plus:
@@ -52,7 +55,6 @@ mail:
   # 端口号163默认为 465 994
   port: 465
   # 默认的邮件编码为UTF-8
-
 
 
 
