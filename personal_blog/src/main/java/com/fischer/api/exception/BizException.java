@@ -16,6 +16,7 @@ public class BizException extends RuntimeException{
         this.data=null;
 
     }
+
     public BizException(HttpStatus status){
         this(status,status.getReasonPhrase());
     }
