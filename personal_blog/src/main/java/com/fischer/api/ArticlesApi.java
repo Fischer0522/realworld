@@ -83,7 +83,7 @@ public class ArticlesApi {
     public ResponseEntity getArticlesFuzzy(
             @RequestParam(value = "offset",defaultValue ="0") int offset,
             @RequestParam(value = "limit",defaultValue = "5") int limit,
-            @RequestParam(value = "value",required = true) String value,
+            @RequestParam(value = "value") String value,
             @RequestHeader(value = "Authorization",required = false) String token
            ){
         User user;

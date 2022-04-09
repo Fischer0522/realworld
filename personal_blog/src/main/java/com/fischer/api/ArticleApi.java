@@ -75,7 +75,7 @@ public class ArticleApi {
                         Article updateArticle = articleCommandService.updateArticle(updateArticleCommand);
                         return ResponseEntity.ok(
                                 new ResultType(HttpStatus.OK.value(),
-                                        articleQueryService.findBySlug(updateArticle.getSlug(),user).get(),
+                                        articleQueryService.findById(updateArticle.getId(),user).get(),
                                         "ok")
                                 );
 

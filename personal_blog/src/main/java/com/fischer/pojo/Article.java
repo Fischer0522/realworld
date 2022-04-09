@@ -2,6 +2,7 @@ package com.fischer.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fischer.assistant.TimeCursor;
 import com.fischer.assistant.Util;
 import lombok.Data;
@@ -32,8 +33,10 @@ public class Article {
     private String description;
     private String body;
     @TableField(exist = false)
+    @JsonIgnore
     private List<Tag> tags=new LinkedList<>();
     @TableField(exist = false)
+    @JsonIgnore
     private List<Image> images=new LinkedList<>();
     @TableField(value = "created_at")
     private String createdAt;

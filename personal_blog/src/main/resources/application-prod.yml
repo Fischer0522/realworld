@@ -28,7 +28,10 @@ spring:
   data:
     mongodb:
       uri: mongodb://fischer:yuxinyi0522@42.192.180.126:27017/blog
-
+  elasticsearch:
+    username: elastic
+    password: yuxinyi0522
+    uris: http://42.192.180.126:9200
 
 
 mybatis-plus:
@@ -57,7 +60,8 @@ mail:
   # 端口号163默认为 465 994
   port: 465
   # 默认的邮件编码为UTF-8
-
+es:
+  host: http://42.192.180.126:9200
 
 
 

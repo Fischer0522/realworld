@@ -29,7 +29,7 @@ spring:
       uri: mongodb://localhost/blog
   elasticsearch:
     username: elastic
-    password: yuxinyi0522
+    password: 123456
     uris: http://localhost:9200
 
 

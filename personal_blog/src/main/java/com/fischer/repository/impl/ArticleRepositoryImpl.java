@@ -1,5 +1,4 @@
 package com.fischer.repository.impl;
-
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,6 +15,10 @@ import com.fischer.pojo.Tag;
 import com.fischer.repository.ArticleRepository;
 import com.fischer.repository.ImageRepository;
 import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.logging.log4j.util.Strings;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.index.IndexRequest;
@@ -51,18 +54,25 @@ public class ArticleRepositoryImpl implements ArticleRepository {
     private ImageRepository imageRepository;
     private String esUri;
     private RestHighLevelClient client;
+    private String username;
+    private String password;
     @Autowired
     public ArticleRepositoryImpl (
             ArticleDao articleDao,
             TagDao tagDao,
             ArticleTagRelationDao articleTagRelationDao,
             ImageRepository imageRepository,
-            @Value("${es.host}") String esUri) {
+            @Value("${es.host}") String esUri,
+            @Value("${spring.elasticsearch.username}")String username,
+            @Value("${spring.elasticsearch.password}")String password) {
         this.articleDao=articleDao;
         this.articleTagRelationDao=articleTagRelationDao;
         this.tagDao=tagDao;
         this.imageRepository=imageRepository;
         this.esUri=esUri;
+        this.username=username;
+        this.password=password;
+
     }
     @Override
     public void save(Article article) {
@@ -71,6 +81,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
         String json = null;
         try {
             json = objectMapper.writeValueAsString(article);
+            System.out.println(json);
         } catch (JsonProcessingException e) {
             throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR,"es序列化失败");
         }
@@ -92,6 +103,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
         else
         {
             articleDao.updateById(article);
+            System.out.println(article.getImages());
             UpdateRequest request=new UpdateRequest("articles",article.getId());
             request.doc(json,XContentType.JSON);
             try {
@@ -163,15 +175,14 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 
     @Override
     public Optional<Article> findBySlug(String slug) {
-        Article article=new Article();
-        article.setSlug(slug);
-        QueryWrapper<Article> wrapper=new QueryWrapper<>(article);
-        Article article1=articleDao.selectOne(wrapper);
-        if(article1==null){
+        LambdaQueryWrapper<Article> wrapper=new LambdaQueryWrapper<>();
+        wrapper.eq(Strings.isNotEmpty(slug),Article::getSlug,slug);
+        Article article=articleDao.selectOne(wrapper);
+        if(article==null){
             return Optional.empty();
         }
         ArticleTagRelation articleTagRelation=new ArticleTagRelation();
-        articleTagRelation.setArticleId(article1.getId());
+        articleTagRelation.setArticleId(article.getId());
         QueryWrapper<ArticleTagRelation>wrapper1=new QueryWrapper<>(articleTagRelation);
         List<String> tagIds=new LinkedList<>();
         for (ArticleTagRelation tagRelation : articleTagRelationDao.selectList(wrapper1)) {
@@ -180,16 +191,18 @@ public class ArticleRepositoryImpl implements ArticleRepository {
         if(!tagIds.isEmpty())
         {
             List<Tag> tags = tagDao.selectBatchIds(tagIds);
-            article1.setTags(tags);
+            article.setTags(tags);
         }
         /*LambdaQueryWrapper<Image> lqw=new LambdaQueryWrapper();
         lqw.eq(Strings.isNotEmpty(slug),Image::getArticleSlug,slug);
         List<Image> images = imageDao.selectList(lqw);*/
+        System.out.println(article.getId());
         List<Image> images = imageRepository.findByArticleId(article.getId());
+        System.out.println(images);
         //List<Image> images = imageRepository.findByArticleSlug(slug);
-        article1.setImages(images);
+        article.setImages(images);
 
-        return Optional.of(article1);
+        return Optional.of(article);
     }
 
 
@@ -279,7 +292,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
     }
 
     @Override
-    public List<Article> getPage(String value,MyPage myPage) {
+    public List<Article> getPage(String value,MyPage myPage){
 
 //        LambdaQueryWrapper<Article> lqw=new LambdaQueryWrapper<>();
 //        lqw.like(Strings.isNotEmpty(article.getTitle()),Article::getTitle,article.getTitle());
@@ -326,16 +339,26 @@ public class ArticleRepositoryImpl implements ArticleRepository {
         request.source(builder);
         ObjectMapper objectMapper = new ObjectMapper();
         List<Article> articles = new LinkedList<>();
+        SearchResponse search = null;
         try {
-            SearchResponse search = client.search(request, RequestOptions.DEFAULT);
-            for (SearchHit hit : search.getHits()) {
-                String sourceAsString = hit.getSourceAsString();
-                Article article = objectMapper.readValue(sourceAsString, Article.class);
-                articles.add(article);
-                client.close();
-            }
+            search = client.search(request, RequestOptions.DEFAULT);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        for (SearchHit hit : search.getHits()) {
+                String sourceAsString = hit.getSourceAsString();
+            Article article = null;
+            try {
+                article = objectMapper.readValue(sourceAsString, Article.class);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            articles.add(article);
+            try {
+                client.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         for (Article record : articles) {
@@ -370,7 +393,12 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 
     void esInit(){
         HttpHost httpHost=HttpHost.create(esUri);
-        RestClientBuilder builder= RestClient.builder(httpHost);
+        RestClientBuilder builder= RestClient.builder(httpHost).setHttpClientConfigCallback(httpClientBuilder -> {
+            CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+            // 如果不需要账号密码就可访问，下面这行可以去掉
+            credentialsProvider.setCredentials(AuthScope.ANY,new UsernamePasswordCredentials(username,password));
+            return httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
+        });
          client = new RestHighLevelClient(builder);
     }
 
