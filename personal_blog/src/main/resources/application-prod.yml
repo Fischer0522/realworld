@@ -30,6 +30,7 @@ spring:
       uri: mongodb://fischer:yuxinyi0522@42.192.180.126:27017/blog
 
 
+
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
@@ -56,6 +57,7 @@ mail:
   # 端口号163默认为 465 994
   port: 465
   # 默认的邮件编码为UTF-8
+
 
 
 

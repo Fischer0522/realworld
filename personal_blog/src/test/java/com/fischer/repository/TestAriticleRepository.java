@@ -136,17 +136,7 @@ public class TestAriticleRepository {
         }
     }
 
-    @Test
-    public void testGetPage(){
-        Article article=new Article();
-        article.setUserId("0522");
-        article.setDescription("this is a description");
-        MyPage myPage=new MyPage(1,1);
-        IPage<Article> page = articleRepository.getPage(myPage, article);
-        for (Article record : page.getRecords()) {
-            System.out.println(record);
-        }
-    }
+
     @Test
     public void testCountArticle(){
         String tag="noob";

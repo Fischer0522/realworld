@@ -82,9 +82,8 @@ public class ArticlesApi {
     @GetMapping(path="fuzzy")
     public ResponseEntity getArticlesFuzzy(
             @RequestParam(value = "offset",defaultValue ="0") int offset,
-            @RequestParam(value = "limit",defaultValue = "0") int limit,
-            @RequestParam(value = "title",required = false) String title,
-            @RequestParam(value = "description",required = false) String description,
+            @RequestParam(value = "limit",defaultValue = "5") int limit,
+            @RequestParam(value = "value",required = true) String value,
             @RequestHeader(value = "Authorization",required = false) String token
            ){
         User user;
@@ -95,8 +94,7 @@ public class ArticlesApi {
             user=null;
         }
         ArticleDataList articleDataList = articleQueryService.findRecentArticlesFuzzy(
-                title,
-                description,
+                value,
                 new MyPage(offset, limit),
                 user
         );

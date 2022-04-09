@@ -38,6 +38,7 @@ public class ArticleCommandServiceImpl implements ArticleCommandService {
     public Article updateArticle(@Valid UpdateArticleCommand updateArticleCommand) {
         Article article = updateArticleCommand.getTargetArticle();
         UpdateArticleParam updateArticleParam = updateArticleCommand.getUpdateArticleParam();
+
         article.update(
                 updateArticleParam.getTitle(),
                 updateArticleParam.getDescription(),

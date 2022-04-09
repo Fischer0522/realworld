@@ -82,12 +82,9 @@ public class ArticleReadServiceImpl implements ArticleReadService {
     }
 
     @Override
-    public List<ArticleData> finArticlesFuzzy(String title, String description,MyPage myPage) {
+    public List<ArticleData> finArticlesFuzzy(String value,MyPage myPage) {
         Article article=new Article();
-        article.setTitle(title);
-        article.setDescription(description);
-        IPage<Article> page = articleRepository.getPage(myPage, article);
-        List<Article> articles = page.getRecords();
+        List<Article> articles = articleRepository.getPage(value, myPage);
         List<ArticleData> articleData=new LinkedList<>();
 
 

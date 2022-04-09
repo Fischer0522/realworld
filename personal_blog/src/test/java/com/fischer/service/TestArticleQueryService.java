@@ -49,19 +49,5 @@ public class TestArticleQueryService {
         ArticleDataList recentArticles = articleQueryService.findRecentArticles(null, null,null, myPage, null);
         System.out.println(recentArticles);
     }
-    @Test
-    public void testFindFuzzy(){
-        String title="";
-        String destription="吸";
-        MyPage myPage=new MyPage();
-        User currentUser=userDao.selectById("1234");
-        ArticleDataList recentArticlesFuzzy = articleQueryService.findRecentArticlesFuzzy(
-                title,
-                destription,
-                myPage,
-                currentUser
-        );
-        System.out.println(recentArticlesFuzzy);
-    }
 
 }

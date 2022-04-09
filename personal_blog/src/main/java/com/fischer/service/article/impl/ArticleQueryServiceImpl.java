@@ -93,12 +93,16 @@ public class ArticleQueryServiceImpl extends ServiceImpl<ArticleDao, Article> im
     }
 
     @Override
-    public ArticleDataList findRecentArticlesFuzzy(String title, String description, MyPage myPage, User currentUser) {
-        List<ArticleData> articleData = articleReadService.finArticlesFuzzy(
+    public ArticleDataList findRecentArticlesFuzzy(String value,MyPage myPage, User currentUser) {
+        /*List<ArticleData> articleData = articleReadService.finArticlesFuzzy(
                 title,
                 description,
+                tag,
+                author,
+                favoritedBy,
                 myPage
-        );
+        );*/
+        List<ArticleData> articleData = articleReadService.finArticlesFuzzy(value, myPage);
         if (articleData.isEmpty()){
             return new ArticleDataList(new ArrayList<>(),0);
         }

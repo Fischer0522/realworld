@@ -27,6 +27,10 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost/blog
+  elasticsearch:
+    username: elastic
+    password: yuxinyi0522
+    uris: http://localhost:9200
 
 
 mybatis-plus:
@@ -55,6 +59,11 @@ mail:
   # 端口号163默认为 465 994
   port: 465
   # 默认的邮件编码为UTF-8
+
+
+# es的uri
+es:
+  host: http://localhost:9200
 
 
 

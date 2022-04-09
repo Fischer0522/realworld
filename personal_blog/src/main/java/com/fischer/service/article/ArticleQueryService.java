@@ -26,8 +26,7 @@ public interface ArticleQueryService {
              User currentUser);
 
      ArticleDataList findRecentArticlesFuzzy(
-             String title,
-             String description,
+             String value,
              MyPage myPage,
              User currentUser
      );

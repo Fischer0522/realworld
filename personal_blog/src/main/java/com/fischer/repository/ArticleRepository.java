@@ -22,6 +22,6 @@ public interface ArticleRepository {
 
     Tag findTag(String tagName);
 
-     IPage<Article> getPage(MyPage myPage, Article article);
+     List<Article> getPage(String value,MyPage myPage);
 
 }

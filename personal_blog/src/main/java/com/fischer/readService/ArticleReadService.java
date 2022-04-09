@@ -14,7 +14,7 @@ public interface ArticleReadService {
     ArticleData findBySlug(String slug);
     List<ArticleData> findArticles(List<String> articelIds);
 
-    List<ArticleData> finArticlesFuzzy(String title, String description, MyPage myPage);
+    List<ArticleData> finArticlesFuzzy(String value, MyPage myPage);
 
 
 }
