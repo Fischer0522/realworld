@@ -11,7 +11,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://42.192.180.126:3307/blog?serverTimezone=Asia/Shanghai #修改ip以及端口 和密码
     username: root
-    password: 123456
+    password: 
     type: com.alibaba.druid.pool.DruidDataSource
   jackson:
     deserialization.UNWRAP_ROOT_VALUE: true
@@ -24,13 +24,13 @@ spring:
         max-idle: 8
         min-idle: 0
         max-wait: 1000ms
-    password: yuxinyi0522
+    password: 
   data:
     mongodb:
       uri: mongodb://fischer:yuxinyi0522@42.192.180.126:27017/blog
   elasticsearch:
     username: elastic
-    password: yuxinyi0522
+    password: 
     uris: http://42.192.180.126:9200
 
 
@@ -56,7 +56,7 @@ mail:
   # 发送者邮箱
   username: fischer0522@163.com
   # 配置密码，注意不是真正的密码，而是刚刚申请到的授权码
-  password: FLFCRBRSZUBWSLYB
+  password: 
   # 端口号163默认为 465 994
   port: 465
   # 默认的邮件编码为UTF-8
