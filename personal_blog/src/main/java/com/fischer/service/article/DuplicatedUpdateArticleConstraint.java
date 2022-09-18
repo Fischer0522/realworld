@@ -1,0 +1,18 @@
+package com.fischer.service.article;
+
+
+import javax.validation.Constraint;
+import javax.validation.Payload;
+import java.lang.annotation.*;
+
+@Documented
+@Constraint(validatedBy = DuplicatedUpdateArticleValidator.class)
+@Target({ElementType.METHOD,ElementType.FIELD,ElementType.PARAMETER,ElementType.TYPE_USE})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface DuplicatedUpdateArticleConstraint {
+    String message() default "已经存在了相同或者同音的标题，换一个吧~";
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
+}
